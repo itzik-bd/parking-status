@@ -5,3 +5,7 @@ variable "app_name" {
 variable "environment_name" {
   type = string
 }
+
+variable "camera_address" {
+  type = string
+}
