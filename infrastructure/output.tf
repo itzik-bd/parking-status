@@ -1,4 +1,4 @@
-output "s3_bucket_id" {
-  description = "The name of the bucket"
-  value = aws_s3_bucket.bucket.id
+output "application_url" {
+  description = "Application URL"
+  value = aws_cloudfront_distribution.s3_distribution.domain_name
 }
