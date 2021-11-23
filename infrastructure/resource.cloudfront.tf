@@ -32,6 +32,12 @@ resource "aws_cloudfront_distribution" "s3_distribution" {
     default_ttl            = 3600
     max_ttl                = 86400
     compress               = true
+
+    lambda_function_association {
+      event_type   = "viewer-request"
+      lambda_arn   = module.lambda_edge_rule.authorizer_lambda_edge_qualified_arn
+      include_body = false
+    }
   }
 
   price_class = "PriceClass_100"
