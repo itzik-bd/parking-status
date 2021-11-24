@@ -1,4 +1,5 @@
 locals {
+  web_output_dir = "${path.root}/../target/web-app"
   mime_types = {
     "css"  = "text/css"
     "html" = "text/html"
@@ -18,11 +19,11 @@ resource "aws_s3_bucket" "bucket" {
 }
 
 resource "aws_s3_bucket_object" "web_files" {
-  for_each = fileset("${path.root}/../web/", "*.*")
+  for_each = fileset(local.web_output_dir, "*.*")
   bucket = aws_s3_bucket.bucket.id
   key = each.value
-  source = "${path.root}/../web/${each.value}"
-  etag = filemd5("${path.root}/../web/${each.value}")
+  source = "${local.web_output_dir}/${each.value}"
+  etag = filemd5("${local.web_output_dir}/${each.value}")
   content_type = lookup(tomap(local.mime_types), element(split(".", each.key), length(split(".", each.key)) - 1))
 }
 
