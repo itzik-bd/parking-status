@@ -13,3 +13,8 @@ variable "camera_address" {
 variable "camera_poll_interval" {
   type = string
 }
+
+locals {
+  pending_dir = "pending"
+  processed_dir = "processed"
+}

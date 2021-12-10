@@ -18,20 +18,27 @@ resource "aws_cloudfront_distribution" "s3_distribution" {
     allowed_methods  = ["DELETE", "GET", "HEAD", "OPTIONS", "PATCH", "POST", "PUT"]
     cached_methods   = ["GET", "HEAD"]
     target_origin_id = local.s3_origin_id
-
-    forwarded_values {
-      query_string = false
-
-      cookies {
-        forward = "none"
-      }
-    }
-
-    viewer_protocol_policy = "redirect-to-https"
-    min_ttl                = 0
-    default_ttl            = 3600
-    max_ttl                = 86400
+    cache_policy_id        = "658327ea-f89d-4fab-a63d-7e88639e58f6" // CachingOptimized
     compress               = true
+    viewer_protocol_policy = "redirect-to-https"
+
+    lambda_function_association {
+      event_type   = "viewer-request"
+      lambda_arn   = module.lambda_edge_rule.authorizer_lambda_edge_qualified_arn
+      include_body = false
+    }
+  }
+
+  # the status.json file contain the state,
+  # so it shouldn't be cached
+  ordered_cache_behavior {
+    path_pattern     = "/status.json"
+    allowed_methods  = ["GET", "HEAD", "OPTIONS"]
+    cached_methods   = ["GET", "HEAD", "OPTIONS"]
+    target_origin_id = local.s3_origin_id
+    cache_policy_id        = "4135ea2d-6df8-44a3-9df3-4b5a84be39ad" // CachingDisabled
+    compress               = true
+    viewer_protocol_policy = "redirect-to-https"
 
     lambda_function_association {
       event_type   = "viewer-request"

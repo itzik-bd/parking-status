@@ -8,6 +8,7 @@ locals {
     "json" = "application/json"
     "map"  = "application/json"
     "png"  = "image/png"
+    "jpeg"  = "image/jpeg"
     "svg"  = "image/svg+xml"
     "txt"  = "text/plain"
   }
@@ -19,7 +20,7 @@ resource "aws_s3_bucket" "bucket" {
 }
 
 resource "aws_s3_bucket_object" "web_files" {
-  for_each = fileset(local.web_output_dir, "*.*")
+  for_each = fileset(local.web_output_dir, "**/*.*")
   bucket = aws_s3_bucket.bucket.id
   key = each.value
   source = "${local.web_output_dir}/${each.value}"

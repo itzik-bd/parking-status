@@ -20,6 +20,7 @@ resource "aws_lambda_function" "video-stream-capture" {
   environment {
     variables = {
       BUCKET_NAME = aws_s3_bucket.bucket.bucket
+      BUCKET_PENDING_DIR = local.pending_dir
       CAMERA_ADDRESS = var.camera_address
     }
   }

@@ -1,1 +1,33 @@
-<p><i class="fas fa-parking"></i> This is an example of a simple HTML page with one paragraph.</p>
+<div *ngIf="!isLoading else Loading" class="outer">
+  <div *ngIf="status else Error" class="outer">
+
+    <div class="details">
+      <div class="slots">
+        <div *ngFor="let item of status.slots" [class.available]="item.available" class="slot">
+          <i class="fas fa-parking"></i>
+        </div>
+      </div>
+    </div>
+
+    <div class="header" [class.available]="isAvailableSlot()">
+      <div class="header-box">
+        <i class="fas fa-parking"></i>
+        <br>
+        <span *ngIf="isAvailableSlot() else NotAvailable">Available</span>
+        <ng-template #NotAvailable>Not available</ng-template>
+      </div>
+    </div>
+
+    <img [src]="status.image" alt="image" style="width: 100%">
+  </div>
+</div>
+
+<ng-template #Error>
+  An error occurred
+  <br>
+  {{error}}
+</ng-template>
+
+<ng-template #Loading>
+  Loading...
+</ng-template>

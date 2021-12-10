@@ -8,6 +8,7 @@ def handler(event, context):
 
     camAddress = os.environ['CAMERA_ADDRESS']
     bucketName = os.environ['BUCKET_NAME']
+    bucketPendingDir = os.environ['BUCKET_PENDING_DIR']
     targetFileName = datetime.now().strftime("image--%d-%m-%Y--%H-%M-%S.jpeg")
     targetFile = f"/tmp/{targetFileName}"
 
@@ -17,7 +18,7 @@ def handler(event, context):
 
     # step 2: upload the screenshot to S3
     s3 = boto3.resource('s3')
-    s3.meta.client.upload_file(targetFile, bucketName, targetFileName)
+    s3.meta.client.upload_file(targetFile, bucketName, bucketPendingDir + "/" + targetFileName)
 
     # step 3: cleanup
     os.remove(targetFile)

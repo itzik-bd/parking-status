@@ -1,0 +1,52 @@
+/* Color plate: https://www.canva.com/colors/color-palettes/light-cherry-blush/ */
+
+.outer {
+  display: flex;
+  flex-direction: column;
+  height: 90vh;
+}
+
+.header {
+  flex: 3;
+  background-color: #C15160;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.header.available {
+  background-color: #839450;
+}
+
+.header .header-box {
+  text-align: center;
+  margin: 0;
+  color: white;
+  font-size: 4em;
+  font-family: cursive;
+}
+
+.header h1 i.fa-parking {
+  color: white;
+}
+
+.details {
+  padding: 20px 0;
+  border-bottom: 3px #987070 solid;
+  background-color: #F7EDE0;
+}
+
+.details .slots {
+  display: flex;
+}
+
+.details .slots .slot {
+  flex: 1;
+  text-align: center;
+  vertical-align: center;
+  color: #C15160;
+  font-size: 2em;
+}
+
+.details .slots .slot.available {
+  color: #839450;
+}
