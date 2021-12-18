@@ -35,11 +35,7 @@ exports.handler = async (eventS3) => {
         ACL: 'public-read'
     }).promise();
 
-    // return success
-    return JSON.stringify({
-        'statusCode': 200,
-        'body': 'Hello from Lambda!'
-    })
+    return summary;
 };
 
 function processImage(file) {

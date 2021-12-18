@@ -4,7 +4,7 @@ const writeFile = require('fs').writeFile;
 const colors = require('colors');
 
 // Load environment variables
-require('dotenv').config();
+require('dotenv-expand')(require('dotenv').config());
 
 // Configure Angular `environment.ts` file path
 const targetPath = './src/environments/environment.development.ts';
@@ -13,6 +13,7 @@ const targetPath = './src/environments/environment.development.ts';
 const envConfigFile = `export const environment = {
    production: false,
    apiBaseUrl: '${process.env['API_BASE_URL']}',
+   wsUrl: '${process.env['WS_URL']}',
 };
 `;
 

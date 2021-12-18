@@ -21,7 +21,11 @@ resource "aws_iam_role" "iam_for_lambda" {
 resource "aws_iam_role_policy_attachment" "iam_for_lambda_policy_attachment" {
   for_each = toset([
     "arn:aws:iam::aws:policy/AmazonS3FullAccess",
-    "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+    "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
+    "arn:aws:iam::aws:policy/AmazonDynamoDBFullAccess",
+    "arn:aws:iam::aws:policy/AmazonAPIGatewayInvokeFullAccess",
+    "arn:aws:iam::aws:policy/service-role/AWSLambdaSQSQueueExecutionRole",
+    "arn:aws:iam::aws:policy/AmazonSQSFullAccess" // for SendMessage
   ])
 
   role       = aws_iam_role.iam_for_lambda.name

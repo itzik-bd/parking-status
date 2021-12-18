@@ -34,22 +34,3 @@ resource "aws_serverlessapplicationrepository_cloudformation_stack" "ffmpeg_laye
     "CAPABILITY_IAM"
   ]
 }
-
-resource "aws_cloudwatch_event_rule" "interval_event" {
-  name = "${var.app_name}--${var.environment_name}--interval-event"
-  description = "Interval event"
-  schedule_expression = var.camera_poll_interval
-}
-
-resource "aws_cloudwatch_event_target" "video-stream-capture-trigger" {
-  rule = aws_cloudwatch_event_rule.interval_event.name
-  arn = aws_lambda_function.video-stream-capture.arn
-}
-
-resource "aws_lambda_permission" "allow_cloudwatch_to_call_video-stream-capture" {
-  statement_id = "AllowExecutionFromCloudWatch"
-  action = "lambda:InvokeFunction"
-  function_name = aws_lambda_function.video-stream-capture.function_name
-  principal = "events.amazonaws.com"
-  source_arn = aws_cloudwatch_event_rule.interval_event.arn
-}

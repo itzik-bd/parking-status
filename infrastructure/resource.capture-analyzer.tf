@@ -43,3 +43,12 @@ resource "aws_lambda_permission" "allow_bucket" {
   source_arn    = aws_s3_bucket.bucket.arn
 }
 
+resource "aws_lambda_function_event_invoke_config" "sqs_destination" {
+  function_name = aws_lambda_function.capture-analyzer.function_name
+
+  destination_config {
+    on_success {
+      destination = aws_sqs_queue.analyze-finish.arn
+    }
+  }
+}
