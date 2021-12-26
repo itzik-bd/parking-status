@@ -3,6 +3,7 @@ const AWS = require('aws-sdk');
 const ddb = new AWS.DynamoDB.DocumentClient({ apiVersion: '2012-08-10', region: process.env.AWS_REGION });
 
 exports.handler = async event => {
+    console.log(`got event: ${JSON.stringify(event)}`);
     let connectionData;
 
     try {
@@ -16,7 +17,7 @@ exports.handler = async event => {
         endpoint: process.env.WS_ENDPOINT_URL
     });
 
-    const postData = JSON.stringify(JSON.parse(event.Records[0].body).responsePayload);
+    const postData = extractMessage(event);
 
     const postCalls = connectionData.Items.map(async ({ connectionId }) => {
         try {
@@ -42,3 +43,19 @@ exports.handler = async event => {
     console.log(`done`);
     return { statusCode: 200, body: 'Data sent.' };
 };
+
+function extractMessage(event) {
+    let data = JSON.parse(event.Records[0].body); // assuming this is already stringified JSON
+
+    // from SNS
+    if (data?.Type === "Notification") {
+        data = JSON.parse(data.Message); // assuming this is already stringified JSON
+    }
+
+    // from lambda
+    if (data?.responsePayload) {
+        data = data.responsePayload;
+    }
+
+    return JSON.stringify(data);
+}

@@ -11,7 +11,7 @@ resource "aws_lambda_function" "ws-on-disconnect" {
   function_name     = "${var.app_name}--${var.environment_name}--ws-on-disconnect"
   role              = aws_iam_role.iam_for_lambda.arn
   handler           = "lambda.handler"
-  runtime           = "nodejs14.x"
+  runtime           = local.nodejs_version
   timeout           = 30
 
   environment {

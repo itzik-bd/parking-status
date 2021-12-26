@@ -8,7 +8,7 @@ resource "aws_iam_role" "iam_for_lambda" {
         "Principal": {
           "Service": [
             "lambda.amazonaws.com",
-            "edgelambda.amazonaws.com"
+            "edgelambda.amazonaws.com",
           ]
         },
         "Effect": "Allow",
@@ -25,7 +25,8 @@ resource "aws_iam_role_policy_attachment" "iam_for_lambda_policy_attachment" {
     "arn:aws:iam::aws:policy/AmazonDynamoDBFullAccess",
     "arn:aws:iam::aws:policy/AmazonAPIGatewayInvokeFullAccess",
     "arn:aws:iam::aws:policy/service-role/AWSLambdaSQSQueueExecutionRole",
-    "arn:aws:iam::aws:policy/AmazonSQSFullAccess" // for SendMessage
+    "arn:aws:iam::aws:policy/AmazonSQSFullAccess", // for SendMessage
+    "arn:aws:iam::aws:policy/AmazonSNSFullAccess", // for Publish
   ])
 
   role       = aws_iam_role.iam_for_lambda.name

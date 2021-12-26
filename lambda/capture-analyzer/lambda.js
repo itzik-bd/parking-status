@@ -23,23 +23,12 @@ exports.handler = async (eventS3) => {
         Key : sourceFile,
     }).promise();
 
-    const summary = processImage(targetFile);
-
-    console.log(`Creating summary JSON file with content: ${JSON.stringify(summary)}`);
-    await s3.upload({
-        Bucket: bucketName,
-        Key: 'status.json',
-        Body: Buffer.from(JSON.stringify(summary)),
-        ContentEncoding: 'base64',
-        ContentType: 'application/json',
-        ACL: 'public-read'
-    }).promise();
-
-    return summary;
+    return processImage(targetFile);
 };
 
 function processImage(file) {
     return {
+        "type": "update",
         "slots": [
             {"available": false},
             {"available": false},

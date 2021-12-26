@@ -10,6 +10,7 @@ terraform {
 variable "app_name" {}
 variable "environment_name" {}
 variable "iam_for_lambda_arn" {}
+variable "nodejs_version" {}
 
 output "authorizer_lambda_edge_qualified_arn" {
   value = aws_lambda_function.authorizer_lambda_edge.qualified_arn
@@ -28,7 +29,7 @@ resource "aws_lambda_function" "authorizer_lambda_edge" {
   function_name     = "${var.app_name}--${var.environment_name}--authorizer"
   role              = var.iam_for_lambda_arn
   handler           = "lambda.handler"
-  runtime           = "nodejs14.x"
+  runtime           = var.nodejs_version
   timeout           = 5
   publish           = true
 }

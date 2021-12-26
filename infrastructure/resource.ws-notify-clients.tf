@@ -11,7 +11,7 @@ resource "aws_lambda_function" "ws-notify-clients" {
   function_name     = "${var.app_name}--${var.environment_name}--ws-notify-clients"
   role              = aws_iam_role.iam_for_lambda.arn
   handler           = "lambda.handler"
-  runtime           = "nodejs14.x"
+  runtime           = local.nodejs_version
   timeout           = 30
 
   environment {
@@ -22,7 +22,22 @@ resource "aws_lambda_function" "ws-notify-clients" {
   }
 }
 
-resource "aws_lambda_event_source_mapping" "example" {
-  event_source_arn = aws_sqs_queue.analyze-finish.arn
+resource "aws_lambda_event_source_mapping" "ws_notify_clients_event_source" {
+  event_source_arn = aws_sqs_queue.notify-clients.arn
   function_name    = aws_lambda_function.ws-notify-clients.arn
+}
+
+resource "aws_sqs_queue" "notify-clients" {
+  name = "${var.app_name}--${var.environment_name}--notify-clients-queue"
+  policy = data.aws_iam_policy_document.sqs-allow-sns.json
+}
+resource "aws_sns_topic_subscription" "analyze_finish_to_notify_clients" {
+  topic_arn = aws_sns_topic.analyze-finish.arn
+  protocol  = "sqs"
+  endpoint  = aws_sqs_queue.notify-clients.arn
+}
+resource "aws_sns_topic_subscription" "refresh_to_notify_clients" {
+  topic_arn = aws_sns_topic.refresh.arn
+  protocol  = "sqs"
+  endpoint  = aws_sqs_queue.notify-clients.arn
 }

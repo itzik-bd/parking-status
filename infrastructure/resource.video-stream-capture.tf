@@ -34,3 +34,18 @@ resource "aws_serverlessapplicationrepository_cloudformation_stack" "ffmpeg_laye
     "CAPABILITY_IAM"
   ]
 }
+
+resource "aws_lambda_event_source_mapping" "video_stream_capture_event_source" {
+  event_source_arn = aws_sqs_queue.video-stream-capture-queue.arn
+  function_name    = aws_lambda_function.video-stream-capture.arn
+}
+
+resource "aws_sqs_queue" "video-stream-capture-queue" {
+  name = "${var.app_name}--${var.environment_name}--video-stream-capture-queue"
+  policy = data.aws_iam_policy_document.sqs-allow-sns.json
+}
+resource "aws_sns_topic_subscription" "refresh_to_video-stream-capture" {
+  topic_arn = aws_sns_topic.refresh.arn
+  protocol  = "sqs"
+  endpoint  = aws_sqs_queue.video-stream-capture-queue.arn
+}

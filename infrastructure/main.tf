@@ -52,4 +52,5 @@ module "lambda_edge_rule" {
   app_name = var.app_name
   environment_name = var.environment_name
   iam_for_lambda_arn = aws_iam_role.iam_for_lambda.arn
+  nodejs_version = local.nodejs_version
 }

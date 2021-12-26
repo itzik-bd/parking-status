@@ -11,12 +11,13 @@ resource "aws_lambda_function" "ws-on-connect" {
   function_name     = "${var.app_name}--${var.environment_name}--ws-on-connect"
   role              = aws_iam_role.iam_for_lambda.arn
   handler           = "lambda.handler"
-  runtime           = "nodejs14.x"
+  runtime           = local.nodejs_version
   timeout           = 30
 
   environment {
     variables = {
       TABLE_NAME = aws_dynamodb_table.ws-table.name
+      SQS_TRIGGER_URL = aws_sqs_queue.trigger-queue.url
     }
   }
 }

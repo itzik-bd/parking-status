@@ -11,7 +11,7 @@ resource "aws_lambda_function" "capture-analyzer" {
   function_name     = "${var.app_name}--${var.environment_name}--capture-analyzer"
   role              = aws_iam_role.iam_for_lambda.arn
   handler           = "lambda.handler"
-  runtime           = "nodejs14.x"
+  runtime           = local.nodejs_version
   timeout           = 30
 
   environment {
@@ -43,12 +43,12 @@ resource "aws_lambda_permission" "allow_bucket" {
   source_arn    = aws_s3_bucket.bucket.arn
 }
 
-resource "aws_lambda_function_event_invoke_config" "sqs_destination" {
+resource "aws_lambda_function_event_invoke_config" "capture-analyzer-sns-destination" {
   function_name = aws_lambda_function.capture-analyzer.function_name
 
   destination_config {
     on_success {
-      destination = aws_sqs_queue.analyze-finish.arn
+      destination = aws_sns_topic.analyze-finish.arn
     }
   }
 }
