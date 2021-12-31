@@ -2,3 +2,5 @@
 .terraform/
 .tfvars
 target/
+.env
+web-app/src/environments/environment.development.ts

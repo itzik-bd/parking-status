@@ -1,6 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {HttpClient} from "@angular/common/http";
 import {ParkingStatus} from "./model";
+import {environment} from "../environments/environment";
 
 @Component({
   selector: 'app-root',
@@ -22,7 +23,7 @@ export class AppComponent implements OnInit {
 
   loadParkingStatus():void {
     this.isLoading = true;
-    return this.http.get<ParkingStatus>(`status.json`, {withCredentials: true})
+    return this.http.get<ParkingStatus>(`${environment.apiBaseUrl}status.json`, {withCredentials: true})
       .subscribe(
         (response: ParkingStatus) => this.status = response,
         (error) => this.error = error.message,
@@ -33,5 +34,9 @@ export class AppComponent implements OnInit {
 
   isAvailableSlot(): boolean {
     return (this.status as ParkingStatus).slots.some((slot) => slot.available);
+  }
+
+  getImageUrl(): string {
+    return environment.apiBaseUrl + (this.status as ParkingStatus).image;
   }
 }

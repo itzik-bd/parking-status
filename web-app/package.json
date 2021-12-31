@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "scripts": {
     "ng": "ng",
-    "start": "ng serve --open",
+    "start": "ts-node set-env.ts && ng serve --configuration=development --open",
     "build": "ng build",
     "clean": "rimraf dist",
     "watch": "ng build --watch --configuration development",
@@ -28,7 +28,8 @@
     "@angular/cli": "~13.0.3",
     "@angular/compiler-cli": "~13.0.0",
     "@types/jasmine": "~3.10.0",
-    "@types/node": "^12.11.1",
+    "@types/node": "^16.11.7",
+    "dotenv": "^10.0.0",
     "jasmine-core": "~3.10.0",
     "karma": "~6.3.0",
     "karma-chrome-launcher": "~3.1.0",

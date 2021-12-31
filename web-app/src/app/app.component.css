@@ -50,3 +50,7 @@
 .details .slots .slot.available {
   color: #839450;
 }
+
+img.latest {
+  width: 100%
+}
