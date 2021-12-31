@@ -14,13 +14,12 @@ export const ParkingSlotList = () => {
   }, []);
 
   return (
-    <View style={styles.slots} bg-grey70>
+    <View style={styles.slots} bg-grey70 center>
       <FlatList
         data={slots}
         renderItem={renderItem}
         keyExtractor={keyExtractor}
         horizontal
-        centerContent
       />
     </View>
   );
