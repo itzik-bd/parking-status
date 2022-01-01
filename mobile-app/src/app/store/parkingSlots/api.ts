@@ -23,7 +23,7 @@ const data: ParkingSlot[] = [
   },
   {
     id: '6',
-    available: true,
+    available: false,
   },
 ];
 

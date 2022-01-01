@@ -4,29 +4,20 @@
 
 import {Navigation} from 'react-native-navigation';
 import {registerComponents} from './src/registerComponents';
-import {screenIds} from './src/constants/screenIds';
+import {demoTabStack, mainTabStack} from './src/constants/bottomTabs';
 
 registerComponents();
+console.disableYellowBox = true;
 
 Navigation.events().registerAppLaunchedListener(() => {
   Navigation.setRoot({
     root: {
-      stack: {
+      bottomTabs: {
         children: [
-          {
-            component: {
-              name: screenIds.main,
-              options: {
-                topBar: {
-                  title: {
-                    text: 'Parking Status Mobile',
-                  },
-                },
-              },
-            },
-          },
+          mainTabStack,
+          demoTabStack,
         ],
-      },
+      }
     },
   });
 });

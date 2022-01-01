@@ -4,17 +4,17 @@ import {StyleSheet} from 'react-native';
 
 export interface ParkingItemProps {
   available: boolean;
-  loaded: boolean;
 }
 
-export const ParkingItem = (props: ParkingItemProps) => {
+export const ParkingItem = React.memo((props: ParkingItemProps) => {
   const bgColor = props.available ? Colors.green30 : Colors.red30;
+
   return (
     <View style={styles.container} backgroundColor={bgColor} center>
       <Text text30BO white>P</Text>
     </View>
   );
-};
+});
 
 const styles = StyleSheet.create({
   container: {
