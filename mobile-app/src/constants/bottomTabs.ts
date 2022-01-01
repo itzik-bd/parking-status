@@ -2,15 +2,15 @@ import {LayoutTabsChildren} from 'react-native-navigation';
 import {screenIds} from './screenIds';
 import {Colors} from 'react-native-ui-lib';
 
-export const mainTabStack: LayoutTabsChildren = {
+const createTabStack = (screenId: string, tabText: string): LayoutTabsChildren => ({
   stack: {
     children: [
       {
         component: {
-          name: screenIds.main,
+          name: screenId,
           options: {
             bottomTab: {
-              text: 'Main',
+              text: tabText,
               selectedTextColor: Colors.blue30,
             },
           }
@@ -18,22 +18,7 @@ export const mainTabStack: LayoutTabsChildren = {
       },
     ],
   },
-};
+});
 
-export const demoTabStack: LayoutTabsChildren = {
-  stack: {
-    children: [
-      {
-        component: {
-          name: screenIds.demo,
-          options: {
-            bottomTab: {
-              text: 'Demo',
-              selectedTextColor: Colors.blue30,
-            },
-          }
-        },
-      },
-    ],
-  },
-};
+export const mainTabStack: LayoutTabsChildren = createTabStack(screenIds.main, 'Main');
+export const demoTabStack: LayoutTabsChildren = createTabStack(screenIds.demo, 'Demo');

@@ -3,7 +3,7 @@ import {screenIds} from './constants/screenIds';
 import {MainScreen} from './app/screens/MainScreen';
 import {DemoScreen} from './app/screens/DemoScreen';
 
-export const registerComponents = () => {
+export const registerScreens = () => {
   Navigation.registerComponent(screenIds.main, () => MainScreen);
   Navigation.registerComponent(screenIds.demo, () => DemoScreen);
 };

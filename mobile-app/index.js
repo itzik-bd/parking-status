@@ -3,21 +3,30 @@
  */
 
 import {Navigation} from 'react-native-navigation';
-import {registerComponents} from './src/registerComponents';
 import {demoTabStack, mainTabStack} from './src/constants/bottomTabs';
+import {registerScreens} from './src/registerScreens';
 
-registerComponents();
+registerScreens();
 console.disableYellowBox = true;
+
+// todo: use enviroment variable
+const isDevMode = true;
+
+const developmentEnvRoot = {
+  bottomTabs: {
+    children: [
+      mainTabStack,
+      demoTabStack,
+    ],
+  },
+};
+
+const productionEnvRoot = {
+  stack: mainTabStack.stack,
+};
 
 Navigation.events().registerAppLaunchedListener(() => {
   Navigation.setRoot({
-    root: {
-      bottomTabs: {
-        children: [
-          mainTabStack,
-          demoTabStack,
-        ],
-      }
-    },
+    root: isDevMode ? developmentEnvRoot : productionEnvRoot,
   });
 });
