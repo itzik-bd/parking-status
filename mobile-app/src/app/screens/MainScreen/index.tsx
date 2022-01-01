@@ -1,5 +1,5 @@
 import React, {useCallback} from 'react';
-import {View, Text} from 'react-native-ui-lib';
+import {View, Text, Image} from 'react-native-ui-lib';
 import {ParkingSlotList} from './components/ParkingSlotsList/';
 import {StatusSection} from './components/StatusSection';
 import {topBarOptions} from '../../../constants/topBarOptions';
@@ -10,17 +10,20 @@ export interface MainScreenProps {
 }
 
 const MainScreen = (props: MainScreenProps) => {
-  const {shouldRender} = useMainScreen({componentId: props.componentId});
+  const {shouldRender, image} = useMainScreen({componentId: props.componentId});
   const renderBody = useCallback(() => {
+    console.log('img src is: ', image.uri);
     return (
       <>
         <StatusSection />
         <View flex center bg-grey10>
-          <Text text30 white>Image</Text>
+          <Text text30 white>
+            <Image source={image} />
+          </Text>
         </View>
       </>
     )
-  }, []);
+  }, [image]);
 
   const renderEmptyState = useCallback(() => {
     return (

@@ -1,28 +1,28 @@
 import React, {useCallback} from 'react';
 import {View, Button} from 'react-native-ui-lib';
-import {parkingSlotsStore} from '../../store/parkingSlots/store';
+import {parkingStatusStore} from '../../store/parkingStatus/store';
 
 const DemoScreen = () => {
   const onPressToggle = useCallback(() => {
-    parkingSlotsStore.setters.isInit(!parkingSlotsStore.getters.isInit());
+    parkingStatusStore.setters.isInit(!parkingStatusStore.getters.isInit());
   }, []);
 
   const onSetNotAvailablePress = useCallback(() => {
-    const list = parkingSlotsStore.getters.slots().map(slot => {
+    const list = parkingStatusStore.getters.slots().map(slot => {
       slot.available = false;
       return slot;
     });
-    parkingSlotsStore.setters.slots(list);
-    parkingSlotsStore.setters.isInit(true);
+    parkingStatusStore.setters.slots(list);
+    parkingStatusStore.setters.isInit(true);
   }, []);
 
   const onSetOnlyFirstAvailable = useCallback(() => {
-    const list = parkingSlotsStore.getters.slots().map((slot, index) => {
+    const list = parkingStatusStore.getters.slots().map((slot, index) => {
       slot.available = index === 0;
       return slot;
     });
-    parkingSlotsStore.setters.slots(list);
-    parkingSlotsStore.setters.isInit(true);
+    parkingStatusStore.setters.slots(list);
+    parkingStatusStore.setters.isInit(true);
   }, []);
 
   const buttonList: { handler: () => void; label: string }[] = [

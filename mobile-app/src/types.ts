@@ -1,10 +1,19 @@
-export interface ParkingStatus {
-  slots: ParkingSlot[];
+export interface RawParkingSlot {
+  available: boolean;
+}
+
+export interface ParkingSlot extends RawParkingSlot{
+  id: string;
+}
+
+export interface RawParkingStatus {
+  slots: RawParkingSlot[];
   image: string;
   lastUpdate: number;
 }
 
-export interface ParkingSlot {
-  id: string;
-  available: boolean;
+export interface ParkingStatus {
+  slots: ParkingSlot[];
+  image: string;
+  lastUpdate: number;
 }

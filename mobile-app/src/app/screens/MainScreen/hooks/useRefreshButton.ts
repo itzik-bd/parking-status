@@ -1,7 +1,7 @@
 import {useNavigationButtonPress} from 'react-native-navigation-hooks';
 import {buttonIds} from '../../../../constants/buttonIds';
 import {useCallback} from 'react';
-import * as parkingSlotsActions from '../../../store/parkingSlots/actions';
+import * as parkingStatusActions from '../../../store/parkingStatus/actions';
 
 export interface UseRefreshButtonProps {
   componentId: string;
@@ -9,8 +9,8 @@ export interface UseRefreshButtonProps {
 
 export const useRefreshButton = (props: UseRefreshButtonProps) => {
   const onPress = useCallback(() => {
-    parkingSlotsActions.fetchData();
-  }, [parkingSlotsActions.fetchData]);
+    parkingStatusActions.fetchData();
+  }, [parkingStatusActions.fetchData]);
 
   useNavigationButtonPress(onPress, props.componentId, buttonIds.topBar.refresh);
 };
