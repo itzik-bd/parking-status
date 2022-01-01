@@ -7,9 +7,33 @@ const DemoScreen = () => {
     parkingSlotsStore.setters.isInit(!parkingSlotsStore.getters.isInit());
   }, []);
 
+  const onSetNotAvailablePress = useCallback(() => {
+    const list = parkingSlotsStore.getters.slots().map(slot => {
+      slot.available = false;
+      return slot;
+    });
+    parkingSlotsStore.setters.slots(list);
+    parkingSlotsStore.setters.isInit(true);
+  }, []);
+
+  const onSetOnlyFirstAvailable = useCallback(() => {
+    const list = parkingSlotsStore.getters.slots().map((slot, index) => {
+      slot.available = index === 0;
+      return slot;
+    });
+    parkingSlotsStore.setters.slots(list);
+    parkingSlotsStore.setters.isInit(true);
+  }, []);
+
+  const buttonList: { handler: () => void; label: string }[] = [
+    {label: 'Toggle is data loaded', handler: onPressToggle},
+    {label: 'Set not available', handler: onSetNotAvailablePress},
+    {label: 'Set only first as available', handler: onSetOnlyFirstAvailable},
+  ];
+
   return (
     <View flex center bg-grey60>
-      <Button label={'Toggle is data loaded'} onPress={onPressToggle} />
+      {buttonList.map(btn => <Button label={btn.label} onPress={btn.handler} key={btn.label} marginV-10 />)}
     </View>
   );
 };

@@ -1,18 +1,30 @@
-import React from 'react';
-import {Colors, View, Text} from 'react-native-ui-lib';
+import React, {useCallback} from 'react';
+import {Colors, View, Text, SkeletonView} from 'react-native-ui-lib';
 import {StyleSheet} from 'react-native';
 
 export interface ParkingItemProps {
   available: boolean;
+  show: boolean | undefined;
 }
 
 export const ParkingItem = React.memo((props: ParkingItemProps) => {
-  const bgColor = props.available ? Colors.green30 : Colors.red30;
+  const render = useCallback(() => {
+    const bgColor = props.available ? Colors.green30 : Colors.red30;
+    return (
+      <View style={styles.container} backgroundColor={bgColor} center>
+        <Text text30BO white>P</Text>
+      </View>
+    );
+  }, [props.available]);
 
   return (
-    <View style={styles.container} backgroundColor={bgColor} center>
-      <Text text30BO white>P</Text>
-    </View>
+    <SkeletonView
+      width={styles.container.width}
+      height={styles.container.width}
+      showContent={props.show}
+      renderContent={render}
+      style={styles.container}
+    />
   );
 });
 

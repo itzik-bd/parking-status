@@ -9,25 +9,16 @@ export const ParkingSlotList = () => {
   const {slots, shouldRender, keyExtractor, styles} = useParkingSlotsList();
 
   const renderItem = useCallback(({item}: {item: ParkingSlot}) => {
-    return <ParkingItem available={item.available} />;
-  }, []);
-
-  const renderList = useCallback(() => (
-    <FlatList
-      data={slots}
-      renderItem={renderItem}
-      keyExtractor={keyExtractor}
-      horizontal
-    />
-  ), [slots, renderItem, keyExtractor]);
+    return <ParkingItem available={item.available} show={shouldRender} />;
+  }, [shouldRender]);
 
   return (
     <View style={styles.slots} bg-white center>
-      <SkeletonView
-        width={styles.skeleton.width}
-        height={styles.skeleton.height}
-        showContent={shouldRender}
-        renderContent={renderList}
+      <FlatList
+        data={slots}
+        renderItem={renderItem}
+        keyExtractor={keyExtractor}
+        horizontal
       />
     </View>
   );
