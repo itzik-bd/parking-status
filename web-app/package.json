@@ -7,7 +7,8 @@
     "build": "ng build",
     "clean": "rimraf dist",
     "watch": "ng build --watch --configuration development",
-    "test": "ng test"
+    "test": "ng test",
+    "ws-server": "cd test-utils/ws-server && ts-node websocket-server.ts"
   },
   "private": true,
   "dependencies": {
@@ -20,6 +21,7 @@
     "@angular/platform-browser-dynamic": "~13.0.0",
     "@angular/router": "~13.0.0",
     "dotenv-expand": "^5.1.0",
+    "moment": "^2.29.1",
     "rxjs": "~7.4.0",
     "tslib": "^2.3.0",
     "zone.js": "~0.11.4"
@@ -30,6 +32,7 @@
     "@angular/compiler-cli": "~13.0.0",
     "@types/jasmine": "~3.10.0",
     "@types/node": "^16.11.7",
+    "@types/websocket": "^1.0.4",
     "dotenv": "^10.0.0",
     "jasmine-core": "~3.10.0",
     "karma": "~6.3.0",
@@ -38,6 +41,7 @@
     "karma-jasmine": "~4.0.0",
     "karma-jasmine-html-reporter": "~1.7.0",
     "ts-node": "^10.4.0",
-    "typescript": "~4.4.3"
+    "typescript": "~4.4.3",
+    "websocket": "^1.0.34"
   }
 }

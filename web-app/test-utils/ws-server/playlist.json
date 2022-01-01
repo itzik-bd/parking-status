@@ -1,0 +1,21 @@
+[
+  {"type":"loading"},
+  {"type":"update","slots":[{"available":false},{"available":false},{"available":true},{"available":true},{"available":true},{"available":false},{"available":true},{"available":true},{"available":false}],"image":"processed/image--01-01-2022--08-51-25.jpeg","lastUpdate":1641027096514},
+  {"type":"loading"},
+  {"type":"update","slots":[{"available":false},{"available":false},{"available":true},{"available":true},{"available":true},{"available":false},{"available":true},{"available":true},{"available":false}],"image":"processed/image--01-01-2022--08-51-37.jpeg","lastUpdate":1641027102851},
+  {"type":"loading"},
+  {"type":"update","slots":[{"available":false},{"available":false},{"available":true},{"available":true},{"available":true},{"available":false},{"available":true},{"available":true},{"available":false}],"image":"processed/image--01-01-2022--08-51-43.jpeg","lastUpdate":1641027109217},
+  {"type":"loading"},
+  {"type":"loading"},
+  {"type":"update","slots":[{"available":false},{"available":false},{"available":true},{"available":true},{"available":true},{"available":false},{"available":true},{"available":true},{"available":false}],"image":"processed/image--01-01-2022--08-51-50.jpeg","lastUpdate":1641027115412},
+  {"type":"update","slots":[{"available":false},{"available":false},{"available":true},{"available":true},{"available":true},{"available":false},{"available":true},{"available":true},{"available":false}],"image":"processed/image--01-01-2022--08-51-55.jpeg","lastUpdate":1641027121614},
+  {"type":"loading"},
+  {"type":"update","slots":[{"available":false},{"available":false},{"available":true},{"available":true},{"available":true},{"available":false},{"available":true},{"available":true},{"available":false}],"image":"processed/image--01-01-2022--08-52-02.jpeg","lastUpdate":1641027127731},
+  {"type":"loading"},
+  {"type":"loading"},
+  {"type":"update","slots":[{"available":false},{"available":false},{"available":true},{"available":true},{"available":true},{"available":false},{"available":true},{"available":true},{"available":false}],"image":"processed/image--01-01-2022--08-52-08.jpeg","lastUpdate":1641027133652},
+  {"type":"update","slots":[{"available":false},{"available":false},{"available":true},{"available":true},{"available":true},{"available":false},{"available":true},{"available":true},{"available":false}],"image":"processed/image--01-01-2022--08-52-14.jpeg","lastUpdate":1641027140829},
+  {"type":"loading"},
+  {"type":"update","slots":[{"available":false},{"available":false},{"available":true},{"available":true},{"available":true},{"available":false},{"available":true},{"available":true},{"available":false}],"image":"processed/image--01-01-2022--08-52-21.jpeg","lastUpdate":1641027147376},
+  {"type":"loading"}
+]

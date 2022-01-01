@@ -1,5 +1,5 @@
 export const environment = {
   production: true,
   apiBaseUrl: '/',
-  wsUrl: '/ws'
+  wsUrl: `wss://${window.location.hostname}/ws`
 };

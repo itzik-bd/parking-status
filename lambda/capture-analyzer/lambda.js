@@ -36,11 +36,6 @@ function processImage(file) {
 
             {"available": true},
             {"available": true},
-
-            {"available": false},
-            {"available": true},
-            {"available": true},
-            {"available": false}
         ],
         "image": file,
         "lastUpdate": new Date().getTime()

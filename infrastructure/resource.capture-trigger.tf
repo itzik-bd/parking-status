@@ -30,6 +30,7 @@ resource "aws_lambda_event_source_mapping" "capture-trigger_event_source" {
 resource "aws_sqs_queue" "trigger-queue" {
   name = "${var.app_name}--${var.environment_name}--trigger-queue"
   policy = data.aws_iam_policy_document.sqs-allow-sns.json
+  delay_seconds = 15 // to avoid too many frequent updates
 }
 resource "aws_sns_topic_subscription" "analyze_finish_to_trigger" {
   topic_arn = aws_sns_topic.analyze-finish.arn

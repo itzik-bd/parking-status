@@ -6,6 +6,18 @@
   height: 90vh;
 }
 
+.meta-bar {
+  padding: 10px 20px;
+  background-color: #987070;
+  display: flex;
+  color: white;
+}
+.meta-bar .last-update {
+  flex: 1;
+  text-align: center;
+  line-height: 2em;
+}
+
 .header {
   flex: 3;
   background-color: #C15160;
@@ -22,7 +34,6 @@
   margin: 0;
   color: white;
   font-size: 4em;
-  font-family: cursive;
 }
 
 .header h1 i.fa-parking {

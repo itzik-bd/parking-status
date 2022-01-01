@@ -1,4 +1,4 @@
-export interface ParkingStatus {
+export interface ParkingStatus extends SingleEvent{
   slots: ParkingSlot[];
   image: string;
   lastUpdate: number;
@@ -6,4 +6,8 @@ export interface ParkingStatus {
 
 export interface ParkingSlot {
   available: boolean;
+}
+
+export interface SingleEvent {
+  type: 'loading' | 'update';
 }

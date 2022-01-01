@@ -1,8 +1,9 @@
 import {Component, OnInit} from '@angular/core';
 import {HttpClient} from "@angular/common/http";
-import {ParkingStatus} from "./model";
+import {ParkingStatus, SingleEvent} from "./model";
 import {environment} from "../environments/environment";
 import {WebSocketService} from "./services/web-socket.service";
+import * as moment from "moment";
 
 @Component({
   selector: 'app-root',
@@ -12,8 +13,8 @@ import {WebSocketService} from "./services/web-socket.service";
 export class AppComponent implements OnInit {
 
   public status: ParkingStatus | null = null;
-  public isLoading: boolean = true;
-  public error: string | null = null;
+  public isLoading: boolean = false;
+  public generalMessage: string | null = null;
 
   constructor(private http: HttpClient,
               private webSocketService: WebSocketService) {
@@ -21,12 +22,26 @@ export class AppComponent implements OnInit {
 
   ngOnInit(): void {
     this.webSocketService.connect();
-    this.webSocketService.register((response: ParkingStatus) => this.loadParkingStatus(response));
+    this.webSocketService.eventStream$.subscribe((response) => this.processEvent(response));
   }
 
-  loadParkingStatus(response: ParkingStatus):void {
-    this.isLoading = false;
-    this.status = response;
+  processEvent(response: SingleEvent):void {
+    this.generalMessage = null;
+
+    switch (response.type) {
+      case "update": {
+        this.isLoading = false;
+        this.status = response as ParkingStatus;
+        break;
+      }
+      case "loading": {
+        this.isLoading = true;
+        break;
+      }
+      default: {
+        this.generalMessage = 'שגיאה: הודעה לא מזוהה';
+      }
+    }
   }
 
   isAvailableSlot(): boolean {
@@ -35,5 +50,13 @@ export class AppComponent implements OnInit {
 
   getImageUrl(): string {
     return environment.apiBaseUrl + (this.status as ParkingStatus).image;
+  }
+
+  getLastUpdateFromNow() {
+    return moment((this.status as ParkingStatus).lastUpdate).locale('he').fromNow();
+  }
+
+  getLastUpdateTime() {
+    return moment((this.status as ParkingStatus).lastUpdate).format('HH:mm:ss');
   }
 }

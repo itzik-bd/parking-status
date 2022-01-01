@@ -1,8 +1,7 @@
 import { Injectable } from '@angular/core';
-import {ParkingStatus} from "../model";
+import {ParkingStatus, SingleEvent} from "../model";
 import {environment} from "../../environments/environment";
-
-type StatusUpdater = (status: ParkingStatus) => void;
+import {Subject} from "rxjs";
 
 @Injectable({
   providedIn: 'root'
@@ -10,7 +9,8 @@ type StatusUpdater = (status: ParkingStatus) => void;
 export class WebSocketService {
 
   private socket: WebSocket | null = null;
-  private consumers: StatusUpdater[] = []
+
+  public eventStream$ = new Subject<SingleEvent>();
 
   public connect(): void {
     this.socket = new WebSocket(environment.wsUrl);
@@ -25,11 +25,6 @@ export class WebSocketService {
       this.socket.close();
     }
     this.socket = null;
-    this.consumers = [];
-  }
-
-  public register(callback: StatusUpdater): void {
-    this.consumers.push(callback);
   }
 
   private static onOpen(event: Event): void {
@@ -47,7 +42,7 @@ export class WebSocketService {
   private onMessageReceived(event: MessageEvent<string>) {
     const data: ParkingStatus = JSON.parse(event.data);
     console.log('got message from WebSocket', data);
-    this.consumers.forEach(c => c(data));
+    this.eventStream$.next(data);
   }
 
 }

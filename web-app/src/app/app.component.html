@@ -1,33 +1,29 @@
-<div *ngIf="!isLoading else Loading" class="outer">
-  <div *ngIf="status else Error" class="outer">
-
-    <div class="details">
-      <div class="slots">
-        <div *ngFor="let item of status.slots" [class.available]="item.available" class="slot">
-          <i class="fas fa-parking"></i>
-        </div>
-      </div>
-    </div>
-
-    <div class="header" [class.available]="isAvailableSlot()">
-      <div class="header-box">
-        <i class="fas fa-parking"></i>
-        <br>
-        <span *ngIf="isAvailableSlot() else NotAvailable">Available</span>
-        <ng-template #NotAvailable>Not available</ng-template>
-      </div>
-    </div>
-
-    <img [src]="getImageUrl()" alt="image" class="latest">
+<div class="meta-bar">
+  <i *ngIf="isLoading" class="fas fa-spinner fa-spin fa-beat-fade fa-2x"></i>
+  <div class="last-update">
+    <span *ngIf="status?.lastUpdate">מעודכן {{getLastUpdateFromNow()}} ({{getLastUpdateTime()}}) </span>
+    <span *ngIf="generalMessage"><i class="fas fa-exclamation-triangle"></i>התרחשה שגיאה</span>
   </div>
+  <i *ngIf="isLoading" class="fas fa-spinner fa-spin fa-beat-fade fa-2x"></i>
 </div>
 
-<ng-template #Error>
-  An error occurred
-  <br>
-  {{error}}
-</ng-template>
+<div *ngIf="status" class="outer">
+  <div class="details">
+    <div class="slots">
+      <div *ngFor="let item of status.slots" [class.available]="item.available" class="slot">
+        <i class="fas fa-parking"></i>
+      </div>
+    </div>
+  </div>
 
-<ng-template #Loading>
-  Loading...
-</ng-template>
+  <div class="header" [class.available]="isAvailableSlot()">
+    <div class="header-box">
+      <i class="fas fa-parking"></i>
+      <br>
+      <span *ngIf="isAvailableSlot() else NotAvailable">פנוי</span>
+      <ng-template #NotAvailable>תפוס</ng-template>
+    </div>
+  </div>
+
+  <img [src]="getImageUrl()" alt="image" class="latest">
+</div>
