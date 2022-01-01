@@ -4,7 +4,6 @@ import {parkingSlotsStore} from '../../store/parkingSlots/store';
 
 const DemoScreen = () => {
   const onPressToggle = useCallback(() => {
-    console.log('** Demo onPressSetNotLoaded');
     parkingSlotsStore.setters.isInit(!parkingSlotsStore.getters.isInit());
   }, []);
 

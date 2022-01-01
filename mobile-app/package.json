@@ -6,7 +6,7 @@
     "android": "react-native run-android",
     "ios": "react-native run-ios",
     "start": "react-native start",
-    "test": "jest",
+    "test": "jest --watchAll",
     "lint": "eslint . --ext .js,.jsx,.ts,.tsx"
   },
   "dependencies": {
@@ -47,21 +47,16 @@
   },
   "jest": {
     "preset": "react-native",
+    "moduleFileExtensions": [
+      "ts",
+      "tsx",
+      "js",
+      "jsx",
+      "json",
+      "node"
+    ],
     "transformIgnorePatterns": [
-      "node_modules/(?!(@react-native|react-native|react-native-reanimated|react-native-redash)/)"
-    ],
-    "testPathIgnorePatterns": [
-      "/e2e/",
-      "/node_modules/",
-      "/typings/",
-      "/expoDemo/",
-      "/uilib-docs/"
-    ],
-    "setupFiles": [
-      "./jest-setup.js"
-    ],
-    "transform": {
-      "^.+\\.js$": "<rootDir>/node_modules/react-native/jest/preprocessor.js"
-    }
+      "node_modules/(?!(jest-)?@react-native|react-native|@react-native-community|@react-navigation|rnn-copilot)"
+    ]
   }
 }
