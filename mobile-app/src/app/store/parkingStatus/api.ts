@@ -39,4 +39,4 @@ const fetchData = async (): Promise<ParkingStatus> => {
   };
 };
 
-export const api = {fetchData, authorizationHeader};
+export const api = {fetchData};
