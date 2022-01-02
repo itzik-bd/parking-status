@@ -4,6 +4,7 @@ import {ParkingSlotList} from './components/ParkingSlotsList/';
 import {StatusSection} from './components/StatusSection';
 import {topBarOptions} from '../../../constants/topBarOptions';
 import {useMainScreen} from './useMainScreen';
+import {StyleSheet} from 'react-native';
 
 export interface MainScreenProps {
   componentId: string;
@@ -12,15 +13,10 @@ export interface MainScreenProps {
 const MainScreen = (props: MainScreenProps) => {
   const {shouldRender, image} = useMainScreen({componentId: props.componentId});
   const renderBody = useCallback(() => {
-    console.log('img src is: ', image.uri);
     return (
       <>
         <StatusSection />
-        <View flex center bg-grey10>
-          <Text text30 white>
-            <Image source={image} />
-          </Text>
-        </View>
+        <Image source={image} style={styles.img} />
       </>
     )
   }, [image]);
@@ -47,3 +43,9 @@ MainScreen.options = {
 };
 
 export {MainScreen};
+
+const styles = StyleSheet.create({
+  img: {
+    height: '45%',
+  },
+});

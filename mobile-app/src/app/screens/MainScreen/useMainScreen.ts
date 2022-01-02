@@ -1,5 +1,6 @@
 import {useRefreshButton} from './hooks/useRefreshButton';
 import {useParkingStatusStore} from '../../store/parkingStatus/useParkingStatusStore';
+import {ImageURISource} from 'react-native';
 
 export interface UseMainScreenProps {
   componentId: string;
@@ -7,7 +8,7 @@ export interface UseMainScreenProps {
 
 export interface UseMainScreen {
   shouldRender: boolean | undefined;
-  image: {uri: string};
+  image: ImageURISource;
 }
 
 export const useMainScreen = (props: UseMainScreenProps): UseMainScreen => {
@@ -17,6 +18,6 @@ export const useMainScreen = (props: UseMainScreenProps): UseMainScreen => {
 
   return {
     shouldRender,
-    image: {uri: image},
+    image,
   };
 };

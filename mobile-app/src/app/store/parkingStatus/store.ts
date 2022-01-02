@@ -1,16 +1,17 @@
 import * as remx from 'remx';
 import {ParkingSlot} from '../../../types';
+import {ImageURISource} from 'react-native';
 
 export interface IParkingStatusStore {
   isInit: boolean;
   slots: ParkingSlot[];
-  image: string;
+  image: ImageURISource;
 }
 
 const initialState: IParkingStatusStore = {
   isInit: false,
   slots: [],
-  image: '',
+  image: {},
 };
 
 const state: IParkingStatusStore = remx.state(initialState);
@@ -19,7 +20,7 @@ const getters = remx.getters({
   slots(): ParkingSlot[] {
     return state.slots;
   },
-  image(): string {
+  image(): ImageURISource {
     return state.image;
   },
   isInit(): boolean {
@@ -31,7 +32,7 @@ const setters = remx.setters({
   slots(newData: ParkingSlot[]): void {
     state.slots = newData;
   },
-  image(newImg: string): void {
+  image(newImg: ImageURISource): void {
     state.image = newImg;
   },
   isInit(val: boolean): void {
