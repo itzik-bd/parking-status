@@ -1,3 +1,5 @@
+import {ImageURISource} from 'react-native';
+
 export interface RawParkingSlot {
   available: boolean;
 }
@@ -14,6 +16,6 @@ export interface RawParkingStatus {
 
 export interface ParkingStatus {
   slots: ParkingSlot[];
-  image: string;
+  image: ImageURISource;
   lastUpdate: number;
 }
