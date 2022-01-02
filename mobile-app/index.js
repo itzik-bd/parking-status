@@ -9,8 +9,7 @@ import {registerScreens} from './src/registerScreens';
 registerScreens();
 console.disableYellowBox = true;
 
-// todo: use enviroment variable
-const isDevMode = true;
+const isDevMode = process.env.NODE_ENV === 'development';
 
 const developmentEnvRoot = {
   bottomTabs: {
