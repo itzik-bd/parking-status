@@ -25,6 +25,15 @@ resource "aws_s3_bucket" "bucket-images" {
     expose_headers  = ["ETag"]
     max_age_seconds = 3000
   }
+
+  lifecycle_rule {
+    id      = "image-cleanup"
+    enabled = true
+
+    expiration {
+      days = 1
+    }
+  }
 }
 
 resource "aws_s3_bucket" "bucket-web-app" {
