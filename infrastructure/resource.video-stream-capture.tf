@@ -48,3 +48,9 @@ resource "aws_sns_topic_subscription" "refresh_to_video-stream-capture" {
   protocol  = "sqs"
   endpoint  = aws_sqs_queue.video-stream-capture-queue.arn
 }
+
+resource "aws_cloudwatch_log_group" "log-retention-video-stream-capture" {
+  name = "/aws/lambda/${aws_lambda_function.video-stream-capture.function_name}"
+  retention_in_days = local.log_retention_days
+}
+

@@ -37,3 +37,8 @@ resource "aws_sns_topic_subscription" "analyze_finish_to_trigger" {
   protocol  = "sqs"
   endpoint  = aws_sqs_queue.trigger-queue.arn
 }
+
+resource "aws_cloudwatch_log_group" "log-retention-capture-trigger" {
+  name = "/aws/lambda/${aws_lambda_function.capture-trigger.function_name}"
+  retention_in_days = local.log_retention_days
+}

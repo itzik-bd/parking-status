@@ -16,6 +16,9 @@ variable "name_prefix" {}
 output "authorizer_lambda_edge_qualified_arn" {
   value = aws_lambda_function.authorizer_lambda_edge.qualified_arn
 }
+output "authorizer_lambda_edge_name" {
+  value = aws_lambda_function.authorizer_lambda_edge.function_name
+}
 
 data "archive_file" "authorizer-code" {
   type        = "zip"

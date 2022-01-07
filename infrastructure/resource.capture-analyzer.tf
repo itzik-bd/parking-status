@@ -43,3 +43,8 @@ resource "aws_lambda_function_event_invoke_config" "capture-analyzer-sns-destina
     }
   }
 }
+
+resource "aws_cloudwatch_log_group" "log-retention-capture-analyzer" {
+  name = "/aws/lambda/${aws_lambda_function.capture-analyzer.function_name}"
+  retention_in_days = local.log_retention_days
+}

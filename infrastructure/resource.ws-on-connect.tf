@@ -29,3 +29,9 @@ resource "aws_lambda_permission" "ws-on-connect-permission" {
   principal     = "apigateway.amazonaws.com"
   source_arn = "${aws_apigatewayv2_api.api-gateway.execution_arn}/*/*"
 }
+
+resource "aws_cloudwatch_log_group" "log-retention-ws-on-connect" {
+  name = "/aws/lambda/${aws_lambda_function.ws-on-connect.function_name}"
+  retention_in_days = local.log_retention_days
+}
+
