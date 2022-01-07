@@ -3,7 +3,7 @@ locals {
 }
 
 resource "aws_apigatewayv2_api" "api-gateway" {
-  name                       = "${var.app_name}--${var.environment_name}--api-gateway"
+  name                       = "${local.resource_prefix}api-gateway"
   protocol_type              = "WEBSOCKET"
   route_selection_expression = "$request.body.action"
 

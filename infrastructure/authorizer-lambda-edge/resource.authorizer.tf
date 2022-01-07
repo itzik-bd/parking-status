@@ -11,6 +11,7 @@ variable "app_name" {}
 variable "environment_name" {}
 variable "iam_for_lambda_arn" {}
 variable "nodejs_version" {}
+variable "name_prefix" {}
 
 output "authorizer_lambda_edge_qualified_arn" {
   value = aws_lambda_function.authorizer_lambda_edge.qualified_arn
@@ -26,7 +27,7 @@ resource "aws_lambda_function" "authorizer_lambda_edge" {
   filename          = data.archive_file.authorizer-code.output_path
   source_code_hash  = data.archive_file.authorizer-code.output_base64sha256
 
-  function_name     = "${var.app_name}--${var.environment_name}--authorizer"
+  function_name     = "${var.name_prefix}authorizer"
   role              = var.iam_for_lambda_arn
   handler           = "lambda.handler"
   runtime           = var.nodejs_version

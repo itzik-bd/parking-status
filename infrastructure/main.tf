@@ -21,6 +21,8 @@ locals {
     App = var.app_name
     Env = var.environment_name
   }
+  nodejs_version = "nodejs14.x"
+  resource_prefix = "${var.app_name}--${var.environment_name}--"
 }
 
 provider "aws" {
@@ -53,4 +55,5 @@ module "lambda_edge_rule" {
   environment_name = var.environment_name
   iam_for_lambda_arn = aws_iam_role.iam_for_lambda.arn
   nodejs_version = local.nodejs_version
+  name_prefix = local.resource_prefix
 }

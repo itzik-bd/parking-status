@@ -1,4 +1,4 @@
-exports.handler = (event, context, callback) => {
+exports.handler = async (event) => {
 
     // Get the request and its headers
     const request = event.Records[0].cf.request;
@@ -9,11 +9,11 @@ exports.handler = (event, context, callback) => {
     const pw = 'password';
 
     // Build a Basic Authentication string
-    const authString = 'Basic ' + new Buffer(user + ':' + pw).toString('base64');
+    const authString = 'Basic ' + Buffer.from(user + ':' + pw).toString('base64');
 
     // Challenge for auth if auth credentials are absent or incorrect
     if (typeof headers.authorization == 'undefined' || headers.authorization[0].value !== authString) {
-        const response = {
+        return {
             status: '401',
             statusDescription: 'Unauthorized',
             body: 'Unauthorized',
@@ -21,9 +21,11 @@ exports.handler = (event, context, callback) => {
                 'www-authenticate': [{key: 'WWW-Authenticate', value:'Basic'}]
             },
         };
-        callback(null, response);
     }
 
+    // for specific request paths, remove the prefix
+    request.uri = request.uri.replace(/^\/images\//,"/");
+
     // User has authenticated
-    callback(null, request);
+    return request;
 };

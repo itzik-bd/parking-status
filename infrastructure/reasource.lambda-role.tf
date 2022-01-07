@@ -1,5 +1,5 @@
 resource "aws_iam_role" "iam_for_lambda" {
-  name = "${var.app_name}--${var.environment_name}--lambda-role"
+  name = "${local.resource_prefix}lambda-role"
   assume_role_policy = jsonencode({
     "Version": "2012-10-17",
     "Statement": [

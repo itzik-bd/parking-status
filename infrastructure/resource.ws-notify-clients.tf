@@ -8,7 +8,7 @@ resource "aws_lambda_function" "ws-notify-clients" {
   filename          = data.archive_file.ws-notify-clients-code.output_path
   source_code_hash  = data.archive_file.ws-notify-clients-code.output_base64sha256
 
-  function_name     = "${var.app_name}--${var.environment_name}--ws-notify-clients"
+  function_name     = "${local.resource_prefix}ws-notify-clients"
   role              = aws_iam_role.iam_for_lambda.arn
   handler           = "lambda.handler"
   runtime           = local.nodejs_version
@@ -28,7 +28,7 @@ resource "aws_lambda_event_source_mapping" "ws_notify_clients_event_source" {
 }
 
 resource "aws_sqs_queue" "notify-clients" {
-  name = "${var.app_name}--${var.environment_name}--notify-clients-queue"
+  name = "${local.resource_prefix}notify-clients-queue"
   policy = data.aws_iam_policy_document.sqs-allow-sns.json
 }
 resource "aws_sns_topic_subscription" "analyze_finish_to_notify_clients" {
