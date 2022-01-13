@@ -45,12 +45,7 @@ exports.handler = async event => {
 };
 
 function extractMessage(event) {
-    let data = JSON.parse(event.Records[0].body); // assuming this is already stringified JSON
-
-    // from SNS
-    if (data?.Type === "Notification") {
-        data = JSON.parse(data.Message); // assuming this is already stringified JSON
-    }
+    let data = JSON.parse(event.Records[0].Sns.Message); // assuming this is already stringified JSON
 
     // from lambda
     if (data?.responsePayload) {

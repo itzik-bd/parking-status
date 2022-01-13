@@ -6,23 +6,39 @@ const sns = new AWS.SNS({ apiVersion: '2010-03-31' });
 const SNS_TOPIC_ARN = process.env.SNS_TOPIC_ARN;
 const TABLE_NAME = process.env.TABLE_NAME;
 
-exports.handler = async (_event) => {
-    let connectionData;
+exports.handler = async (event) => {
+    console.log(JSON.stringify(event));
+
+    // skip REMOVE row event from dynamo DB
+    if (event?.Records[0]?.eventName === 'REMOVE') {
+        console.log('got remove row event from DynamoDB - skip trigger');
+        return;
+    }
+
+    let scanResult;
 
     try {
-        connectionData = await ddb.scan({ TableName: TABLE_NAME, ProjectionExpression: 'connectionId' }).promise();
+        scanResult = await ddb.scan({
+            TableName: TABLE_NAME,
+            Select: "COUNT"
+        }).promise();
     } catch (e) {
         return { statusCode: 500, body: e.stack };
     }
 
-    const numberOfConnections = connectionData.Items.length;
+    let numberOfConnections = scanResult['Count'];
 
     if (numberOfConnections === 0) {
         console.log('no connection present - skip trigger');
         return;
     }
 
-    console.log(`triggering as there are ${numberOfConnections} active connections`);
+    if (numberOfConnections > 1) {
+        console.log(`there are currently ${numberOfConnections} active connection - skip trigger (assuming it isn't the first)`);
+        return;
+    }
+
+    console.log(`triggering as this is the first active connection`);
     const message = {type: 'loading'};
     let result;
     try {

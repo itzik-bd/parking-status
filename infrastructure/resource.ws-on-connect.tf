@@ -17,7 +17,6 @@ resource "aws_lambda_function" "ws-on-connect" {
   environment {
     variables = {
       TABLE_NAME = aws_dynamodb_table.ws-table.name
-      SQS_TRIGGER_URL = aws_sqs_queue.trigger-queue.url
     }
   }
 }

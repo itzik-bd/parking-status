@@ -34,19 +34,17 @@ resource "aws_serverlessapplicationrepository_cloudformation_stack" "ffmpeg_laye
   ]
 }
 
-resource "aws_lambda_event_source_mapping" "video_stream_capture_event_source" {
-  event_source_arn = aws_sqs_queue.video-stream-capture-queue.arn
-  function_name    = aws_lambda_function.video-stream-capture.arn
+resource "aws_lambda_permission" "video-stream-capture-sns-permission" {
+  statement_id  = "AllowExecutionFromSNS"
+  action        = "lambda:InvokeFunction"
+  function_name = aws_lambda_function.video-stream-capture.arn
+  principal     = "sns.amazonaws.com"
 }
 
-resource "aws_sqs_queue" "video-stream-capture-queue" {
-  name = "${local.resource_prefix}video-stream-capture-queue"
-  policy = data.aws_iam_policy_document.sqs-allow-sns.json
-}
 resource "aws_sns_topic_subscription" "refresh_to_video-stream-capture" {
   topic_arn = aws_sns_topic.refresh.arn
-  protocol  = "sqs"
-  endpoint  = aws_sqs_queue.video-stream-capture-queue.arn
+  protocol  = "lambda"
+  endpoint  = aws_lambda_function.video-stream-capture.arn
 }
 
 resource "aws_cloudwatch_log_group" "log-retention-video-stream-capture" {

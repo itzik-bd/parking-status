@@ -24,9 +24,8 @@ resource "aws_iam_role_policy_attachment" "iam_for_lambda_policy_attachment" {
     "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
     "arn:aws:iam::aws:policy/AmazonDynamoDBFullAccess",
     "arn:aws:iam::aws:policy/AmazonAPIGatewayInvokeFullAccess",
-    "arn:aws:iam::aws:policy/service-role/AWSLambdaSQSQueueExecutionRole",
-    "arn:aws:iam::aws:policy/AmazonSQSFullAccess", // for SendMessage
     "arn:aws:iam::aws:policy/AmazonSNSFullAccess", // for Publish
+    "arn:aws:iam::aws:policy/AWSStepFunctionsFullAccess", // for invoking step function
   ])
 
   role       = aws_iam_role.iam_for_lambda.name

@@ -22,24 +22,22 @@ resource "aws_lambda_function" "ws-notify-clients" {
   }
 }
 
-resource "aws_lambda_event_source_mapping" "ws_notify_clients_event_source" {
-  event_source_arn = aws_sqs_queue.notify-clients.arn
-  function_name    = aws_lambda_function.ws-notify-clients.arn
+resource "aws_lambda_permission" "notify-clients-sns-permission-from-analyze-finish" {
+  statement_id  = "AllowExecutionFromSNS"
+  action        = "lambda:InvokeFunction"
+  function_name = aws_lambda_function.ws-notify-clients.arn
+  principal     = "sns.amazonaws.com"
 }
 
-resource "aws_sqs_queue" "notify-clients" {
-  name = "${local.resource_prefix}notify-clients-queue"
-  policy = data.aws_iam_policy_document.sqs-allow-sns.json
-}
 resource "aws_sns_topic_subscription" "analyze_finish_to_notify_clients" {
   topic_arn = aws_sns_topic.analyze-finish.arn
-  protocol  = "sqs"
-  endpoint  = aws_sqs_queue.notify-clients.arn
+  protocol  = "lambda"
+  endpoint  = aws_lambda_function.ws-notify-clients.arn
 }
 resource "aws_sns_topic_subscription" "refresh_to_notify_clients" {
   topic_arn = aws_sns_topic.refresh.arn
-  protocol  = "sqs"
-  endpoint  = aws_sqs_queue.notify-clients.arn
+  protocol  = "lambda"
+  endpoint  = aws_lambda_function.ws-notify-clients.arn
 }
 
 resource "aws_cloudwatch_log_group" "log-retention-ws-notify-clients" {
