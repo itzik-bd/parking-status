@@ -59,6 +59,8 @@ module "lambda_edge_rule" {
   iam_for_lambda_arn = aws_iam_role.iam_for_lambda.arn
   nodejs_version = local.nodejs_version
   name_prefix = local.resource_prefix
+  credentials_user = var.credentials_user
+  credentials_pass = var.credentials_pass
 }
 
 # it's here as a workaround as the log group name contains the region

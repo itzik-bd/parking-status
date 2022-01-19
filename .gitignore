@@ -4,3 +4,4 @@
 target/
 .env
 web-app/src/environments/environment.development.ts
+lambda/authorizer/credentials.js
