@@ -49,7 +49,11 @@ export class AppComponent implements OnInit {
   }
 
   getImageUrl(): string {
-    return environment.apiBaseUrl + (this.status as ParkingStatus).image;
+    if (this.status) {
+      return environment.apiBaseUrl + (this.status as ParkingStatus).image;
+    } else {
+      return 'assets/image--placeholder.jpeg';
+    }
   }
 
   getLastUpdateFromNow() {

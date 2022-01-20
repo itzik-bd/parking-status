@@ -7,7 +7,7 @@ const colors = require('colors');
 require('dotenv-expand')(require('dotenv').config());
 
 // Configure Angular `environment.ts` file path
-const targetPath = './src/environments/environment.development.ts';
+const targetPath = './src/environments/environment.dev-prod.ts';
 
 // `environment.ts` file structure
 const envConfigFile = `export const environment = {

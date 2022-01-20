@@ -3,7 +3,7 @@
 .outer {
   display: flex;
   flex-direction: column;
-  height: 90vh;
+  height: 100%;
 }
 
 .meta-bar {
@@ -63,5 +63,5 @@
 }
 
 img.latest {
-  width: 100%
+  width: 100%;
 }

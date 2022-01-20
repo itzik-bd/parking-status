@@ -3,5 +3,5 @@
 .tfvars
 target/
 .env
-web-app/src/environments/environment.development.ts
+web-app/src/environments/environment.dev-prod.ts
 lambda/authorizer/credentials.js
