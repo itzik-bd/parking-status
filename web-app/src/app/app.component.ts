@@ -15,6 +15,7 @@ export class AppComponent implements OnInit {
   public status: ParkingStatus | null = null;
   public isLoading: boolean = false;
   public generalMessage: string | null = null;
+  private timerInterval: NodeJS.Timer | null = null;
 
   constructor(private http: HttpClient,
               private webSocketService: WebSocketService) {
@@ -23,15 +24,21 @@ export class AppComponent implements OnInit {
   ngOnInit(): void {
     this.webSocketService.connect();
     this.webSocketService.eventStream$.subscribe((response) => this.processEvent(response));
+    this.timerInterval = setInterval(() => this.updateTimer(), 1000);
+  }
+
+  updateTimer() {
+    if (this.status) {
+      this.generalMessage = `updated to ${this.calculateSecondsSinceLastUpdate()} seconds ago`;
+    }
   }
 
   processEvent(response: SingleEvent):void {
-    this.generalMessage = null;
-
     switch (response.type) {
       case "update": {
         this.isLoading = false;
         this.status = response as ParkingStatus;
+        this.updateTimer();
         break;
       }
       case "loading": {
@@ -39,28 +46,41 @@ export class AppComponent implements OnInit {
         break;
       }
       default: {
-        this.generalMessage = 'שגיאה: הודעה לא מזוהה';
+        this.generalMessage = 'Error: unknown message';
       }
     }
   }
 
   isAvailableSlot(): boolean {
-    return (this.status as ParkingStatus).slots.some((slot) => slot.available);
+    if (this.status) {
+      return this.status.slots.some((slot) => slot.available);
+    } else {
+      return false;
+    }
+
   }
 
-  getImageUrl(): string {
+  getBigAreaClass(): string {
     if (this.status) {
-      return environment.apiBaseUrl + (this.status as ParkingStatus).image;
+      return this.isAvailableSlot() ? 'available' : 'unavailable';
     } else {
-      return 'assets/image--placeholder.jpeg';
+      return '';
     }
   }
 
-  getLastUpdateFromNow() {
-    return moment((this.status as ParkingStatus).lastUpdate).locale('he').fromNow();
+  calculateBigAreaIcon(): string {
+    if (this.status) {
+      return this.isLoading ? 'fas fa-spinner fa-8x fa-spin' : 'fas fa-parking fa-8x';
+    } else {
+      return 'fa-10x fab fa-connectdevelop fa-pulse icon-connecting';
+    }
   }
 
-  getLastUpdateTime() {
-    return moment((this.status as ParkingStatus).lastUpdate).format('HH:mm:ss');
+  getImageUrl(): string {
+    return environment.apiBaseUrl + (this.status as ParkingStatus).image;
+  }
+
+  calculateSecondsSinceLastUpdate() {
+    return moment().diff(moment((this.status as ParkingStatus).lastUpdate), 'seconds');
   }
 }

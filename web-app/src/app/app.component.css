@@ -6,38 +6,32 @@
   height: 100%;
 }
 
-.meta-bar {
-  padding: 10px 20px;
-  background-color: #987070;
-  display: flex;
-  color: white;
-}
-.meta-bar .last-update {
-  flex: 1;
-  text-align: center;
-  line-height: 2em;
-}
-
-.header {
+.big-area {
   flex: 3;
-  background-color: #C15160;
   display: flex;
   align-items: center;
   justify-content: center;
 }
-.header.available {
+.big-area.available {
   background-color: #839450;
+  color: white;
+}
+.big-area.unavailable {
+  background-color: #C15160;
+  color: white;
 }
 
-.header .header-box {
+.big-area .header-box {
   text-align: center;
   margin: 0;
-  color: white;
-  font-size: 4em;
 }
 
-.header h1 i.fa-parking {
-  color: white;
+.big-area .header-box .message {
+  margin-top: 20px;
+}
+
+.big-area .icon-connecting {
+  color: #839450;
 }
 
 .details {
