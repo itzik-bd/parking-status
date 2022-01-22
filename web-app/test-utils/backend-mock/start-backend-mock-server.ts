@@ -35,7 +35,7 @@ function handleConnection(request: request) {
 
   console.log("client connected");
 
-  sendMessageAndScheduleNextMessage();
+  scheduleNextMessage(2);
 
   // stop the interval upon client close connection
   connection.on('close', (_connection) => {
@@ -58,6 +58,10 @@ function handleConnection(request: request) {
     connection.send(JSON.stringify(message));
 
     isNextMessageIsLoading = !isNextMessageIsLoading;
+    scheduleNextMessage(timeoutSeconds);
+  }
+
+  function scheduleNextMessage(timeoutSeconds) {
     interval = setTimeout(() => sendMessageAndScheduleNextMessage(), timeoutSeconds * 1000);
   }
 

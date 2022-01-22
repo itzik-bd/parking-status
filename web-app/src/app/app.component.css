@@ -28,6 +28,8 @@
 
 .big-area .header-box .message {
   margin-top: 20px;
+  min-height: 50px;
+  white-space: pre-line;
 }
 
 .big-area .icon-connecting {

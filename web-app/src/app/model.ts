@@ -11,3 +11,9 @@ export interface ParkingSlot {
 export interface SingleEvent {
   type: 'loading' | 'update';
 }
+
+export type WebSocketLifeCycleType = 'connect' | 'disconnect' | 'error';
+export interface WebSocketLifeCycleEvent {
+  type: WebSocketLifeCycleType;
+  originalEvent: Event;
+}
