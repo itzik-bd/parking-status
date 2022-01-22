@@ -16,7 +16,7 @@ resource "aws_sfn_state_machine" "wait-and-refresh" {
       "Type": "Task",
       "Resource": "arn:aws:states:::lambda:invoke",
       "Parameters": {
-        "FunctionName": "${aws_lambda_function.refresh-if-active-clients.arn}"
+        "FunctionName": "${aws_lambda_function.refresh-trigger.arn}"
       },
       "End": true
     }
