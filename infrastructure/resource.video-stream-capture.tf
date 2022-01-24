@@ -9,7 +9,7 @@ resource "aws_lambda_function" "video-stream-capture" {
   source_code_hash  = data.archive_file.video-stream-capture-code.output_base64sha256
 
   function_name     = "${local.resource_prefix}video-stream-capture"
-  role              = aws_iam_role.iam_for_lambda.arn
+  role              = aws_iam_role.iam_role.arn
   handler           = "lambda.handler"
   runtime           = "python3.8"
   timeout           = 30

@@ -1,6 +1,6 @@
 resource "aws_sfn_state_machine" "wait-and-refresh" {
   name     = "${local.resource_prefix}wait-and-refresh"
-  role_arn = aws_iam_role.iam_for_step_function.arn
+  role_arn = aws_iam_role.iam_role.arn
 
   definition = <<EOF
 {
@@ -36,7 +36,7 @@ resource "aws_lambda_function" "trigger-wait-and-refresh" {
   source_code_hash  = data.archive_file.trigger-wait-and-refresh-code.output_base64sha256
 
   function_name     = "${local.resource_prefix}trigger-wait-and-refresh"
-  role              = aws_iam_role.iam_for_lambda.arn
+  role              = aws_iam_role.iam_role.arn
   handler           = "lambda.handler"
   runtime           = local.nodejs_version
   timeout           = 30

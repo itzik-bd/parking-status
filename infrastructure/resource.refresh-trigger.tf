@@ -9,7 +9,7 @@ resource "aws_lambda_function" "refresh-trigger" {
   source_code_hash  = data.archive_file.refresh-trigger-code.output_base64sha256
 
   function_name     = "${local.resource_prefix}refresh-trigger"
-  role              = aws_iam_role.iam_for_lambda.arn
+  role              = aws_iam_role.iam_role.arn
   handler           = "lambda.handler"
   runtime           = local.nodejs_version
   timeout           = 30

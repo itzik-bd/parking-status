@@ -56,7 +56,7 @@ module "lambda_edge_rule" {
 
   app_name = var.app_name
   environment_name = var.environment_name
-  iam_for_lambda_arn = aws_iam_role.iam_for_lambda.arn
+  iam_for_lambda_arn = aws_iam_role.iam_role.arn
   nodejs_version = local.nodejs_version
   name_prefix = local.resource_prefix
   credentials_user = var.credentials_user
