@@ -9,8 +9,9 @@ export interface UseRefreshButtonProps {
 
 export const useRefreshButton = (props: UseRefreshButtonProps) => {
   const onPress = useCallback(() => {
-    parkingStatusActions.fetchData();
-  }, [parkingStatusActions.fetchData]);
+    parkingStatusActions.clearState();
+    parkingStatusActions.refreshWebsocket();
+  }, [parkingStatusActions.refreshWebsocket]);
 
   useNavigationButtonPress(onPress, props.componentId, buttonIds.topBar.refresh);
 };

@@ -9,22 +9,28 @@ export interface UseParkingStatusStore {
   slots: ParkingSlot[];
   isInit: boolean;
   image: ImageURISource;
+  isLoading: boolean;
 }
 
 export const useParkingStatusStore = (): UseParkingStatusStore => {
-  const {slots, isInit, image} = useConnect(() => ({
+  const {slots, isInit, image, messageStatus} = useConnect(() => ({
     slots: parkingStatusStore.getters.slots(),
     isInit: parkingStatusStore.getters.isInit(),
     image: parkingStatusStore.getters.image(),
+    messageStatus: parkingStatusStore.getters.messageStatus(),
   }));
 
   useEffect(() => {
-    actions.fetchDataIfNeeded();
+    actions.createWebSocketIfNeeded();
+    // return actions.clearWebSocket;
   }, []);
+
+  const isLoading = messageStatus === 'loading';
 
   return {
     slots,
     isInit,
     image,
+    isLoading,
   };
 };

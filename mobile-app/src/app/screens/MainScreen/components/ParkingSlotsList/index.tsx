@@ -1,5 +1,5 @@
 import {FlatList} from 'react-native';
-import {View, SkeletonView} from 'react-native-ui-lib';
+import {View} from 'react-native-ui-lib';
 import React, {useCallback} from 'react';
 import {ParkingItem} from './ParkingItem';
 import {ParkingSlot} from '../../../../../types';

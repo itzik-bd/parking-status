@@ -24,8 +24,8 @@ const MainScreen = (props: MainScreenProps) => {
   const renderEmptyState = useCallback(() => {
     return (
       <View flex center>
-        <Text white text10>Ops!</Text>
-        <Text white text40>No data, loading..</Text>
+        <Text grey10 text10>Ops!</Text>
+        <Text grey10 text40>No data, loading..</Text>
       </View>
     );
   }, []);
@@ -46,6 +46,7 @@ export {MainScreen};
 
 const styles = StyleSheet.create({
   img: {
-    height: '45%',
+    width: '100%',
+    aspectRatio: 1920 / 1080,
   },
 });

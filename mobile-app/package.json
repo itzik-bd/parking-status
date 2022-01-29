@@ -3,6 +3,7 @@
   "version": "0.0.1",
   "private": true,
   "scripts": {
+    "start:backend-mock-server": "cd ../web-app/test-utils/backend-mock && ts-node start-backend-mock-server.ts",
     "android": "react-native run-android",
     "ios": "react-native run-ios",
     "start": "react-native start",

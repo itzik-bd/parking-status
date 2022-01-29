@@ -3,11 +3,11 @@ import {View, Text} from 'react-native-ui-lib';
 import {useStatusSection} from './useStatusSection';
 
 export const StatusSection = React.memo(() => {
-  const {bgColor, text} = useStatusSection();
+  const {color, text} = useStatusSection();
 
   return (
-    <View flex center backgroundColor={bgColor}>
-      <Text text20 white>{text}</Text>
+    <View flex center>
+      <Text text10M color={color}>{text}</Text>
     </View>
   );
 });

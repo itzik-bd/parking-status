@@ -1,9 +1,10 @@
 import React, {useCallback} from 'react';
-import {View, Button} from 'react-native-ui-lib';
+import {View} from 'react-native-ui-lib';
 import {parkingStatusStore} from '../../store/parkingStatus/store';
+import {Button} from 'react-native-ui-lib';
 
 const DemoScreen = () => {
-  const onPressToggle = useCallback(() => {
+  const onTogglePress = useCallback(() => {
     parkingStatusStore.setters.isInit(!parkingStatusStore.getters.isInit());
   }, []);
 
@@ -26,7 +27,7 @@ const DemoScreen = () => {
   }, []);
 
   const buttonList: { handler: () => void; label: string }[] = [
-    {label: 'Toggle is data loaded', handler: onPressToggle},
+    {label: 'Toggle is data loaded', handler: onTogglePress},
     {label: 'Set not available', handler: onSetNotAvailablePress},
     {label: 'Set only first as available', handler: onSetOnlyFirstAvailable},
   ];

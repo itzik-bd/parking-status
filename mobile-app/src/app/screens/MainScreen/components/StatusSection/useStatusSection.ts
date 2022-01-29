@@ -2,18 +2,19 @@ import {useParkingStatusStore} from '../../../../store/parkingStatus/useParkingS
 import {Colors} from 'react-native-ui-lib';
 
 export interface UseStatusSection {
-  bgColor: string;
+  color: string;
   text: string;
 }
 
 export const useStatusSection = (): UseStatusSection => {
-  const {slots} = useParkingStatusStore();
+  const {slots, isLoading} = useParkingStatusStore();
   const isEmpty = slots.some(slot => slot.available);
-  const bgColor = isEmpty ? Colors.green40 : Colors.red40;
-  const text = isEmpty ? 'yay! Empty' : 'dam, Nothing';
+  const color = isEmpty ? Colors.green20 : Colors.red20;
+  const text = isLoading ? 'loading..' :
+    isEmpty ? 'Empty' : 'Nothing';
 
   return {
-    bgColor,
+    color,
     text,
   };
 };

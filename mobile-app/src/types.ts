@@ -9,6 +9,7 @@ export interface ParkingSlot extends RawParkingSlot{
 }
 
 export interface RawParkingStatus {
+  type: string;
   slots: RawParkingSlot[];
   image: string;
   lastUpdate: number;
@@ -19,3 +20,9 @@ export interface ParkingStatus {
   image: ImageURISource;
   lastUpdate: number;
 }
+
+export interface WebSocketDataLoading {
+  type: string;
+}
+
+export type WebSocketData = WebSocketDataLoading | RawParkingStatus;
