@@ -1,14 +1,6 @@
-<div class="meta-bar">
-  <i *ngIf="isLoading" class="fas fa-spinner fa-spin fa-beat-fade fa-2x"></i>
-  <div class="last-update">
-    <span *ngIf="status?.lastUpdate">מעודכן {{getLastUpdateFromNow()}} ({{getLastUpdateTime()}}) </span>
-    <span *ngIf="generalMessage"><i class="fas fa-exclamation-triangle"></i>התרחשה שגיאה</span>
-  </div>
-  <i *ngIf="isLoading" class="fas fa-spinner fa-spin fa-beat-fade fa-2x"></i>
-</div>
+<div class="outer">
 
-<div *ngIf="status" class="outer">
-  <div class="details">
+  <div *ngIf="status" class="details">
     <div class="slots">
       <div *ngFor="let item of status.slots" [class.available]="item.available" class="slot">
         <i class="fas fa-parking"></i>
@@ -16,14 +8,13 @@
     </div>
   </div>
 
-  <div class="header" [class.available]="isAvailableSlot()">
+  <div class="big-area" [ngClass]="getBigAreaClass()">
     <div class="header-box">
-      <i class="fas fa-parking"></i>
-      <br>
-      <span *ngIf="isAvailableSlot() else NotAvailable">פנוי</span>
-      <ng-template #NotAvailable>תפוס</ng-template>
+        <i [ngClass]="calculateBigAreaIcon()"></i>
+        <div class="message">{{message}}</div>
     </div>
   </div>
 
-  <img [src]="getImageUrl()" alt="image" class="latest">
+  <img *ngIf="status" [src]="getImageUrl()" alt="image" class="latest">
+
 </div>

@@ -10,8 +10,12 @@ variable "camera_address" {
   type = string
 }
 
-locals {
-  pending_dir = "pending"
-  processed_dir = "processed"
-  nodejs_version = "nodejs14.x"
+variable "credentials_user" {
+  type = string
+  sensitive = true
+}
+
+variable "credentials_pass" {
+  type = string
+  sensitive = true
 }

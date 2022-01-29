@@ -1,18 +1,14 @@
-// This file can be replaced during build by using the `fileReplacements` array.
-// `ng build` replaces `environment.ts` with `environment.prod.ts`.
-// The list of file replacements can be found in `angular.json`.
+// This configuration is for "dev-local" profile
+// it assumes that the backend mock server is
+// running and listening on localhost:1337,
+// and the traffic is forwarded by proxy-dev-local.conf.json
 
 export const environment = {
   production: false,
-  apiBaseUrl: '/',
-  wsUrl: '/ws'
+  apiBaseUrl: '',
+  wsUrl: `${getWsProtocol()}://${window.location.hostname}:${window.location.port}/ws-proxy`
 };
 
-/*
- * For easier debugging in development mode, you can import the following file
- * to ignore zone related error stack frames such as `zone.run`, `zoneDelegate.invokeTask`.
- *
- * This import should be commented out in production mode because it will have a negative impact
- * on performance if an error is thrown.
- */
-// import 'zone.js/plugins/zone-error';  // Included with Angular CLI.
+function getWsProtocol() {
+  return window.location.protocol === "http:" ? "ws" : "wss";
+}

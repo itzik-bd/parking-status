@@ -2,13 +2,11 @@
   "name": "web-app",
   "version": "0.0.0",
   "scripts": {
-    "ng": "ng",
-    "start": "ts-node set-env.ts && ng serve --configuration=development --open",
-    "build": "ng build",
-    "clean": "rimraf dist",
-    "watch": "ng build --watch --configuration development",
-    "test": "ng test",
-    "ws-server": "cd test-utils/ws-server && ts-node websocket-server.ts"
+    "start:backend-mock-server": "cd test-utils/backend-mock && ts-node start-backend-mock-server.ts",
+    "start:dev-local": "ng serve",
+    "start:dev-prod": "ts-node set-dev-prod-env.ts && ng serve --configuration=dev-prod",
+    "build": "rimraf ../target/web-app && ng build --configuration=production",
+    "test": "ng test"
   },
   "private": true,
   "dependencies": {
@@ -34,12 +32,14 @@
     "@types/node": "^16.11.7",
     "@types/websocket": "^1.0.4",
     "dotenv": "^10.0.0",
+    "finalhandler": "^1.1.2",
     "jasmine-core": "~3.10.0",
     "karma": "~6.3.0",
     "karma-chrome-launcher": "~3.1.0",
     "karma-coverage": "~2.0.3",
     "karma-jasmine": "~4.0.0",
     "karma-jasmine-html-reporter": "~1.7.0",
+    "serve-static": "^1.14.2",
     "ts-node": "^10.4.0",
     "typescript": "~4.4.3",
     "websocket": "^1.0.34"

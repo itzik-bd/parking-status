@@ -1,7 +1,7 @@
 resource "aws_sns_topic" "analyze-finish" {
-  name = "${var.app_name}--${var.environment_name}--analize-finish"
+  name = "${local.resource_prefix}analize-finish"
 }
 
 resource "aws_sns_topic" "refresh" {
-  name = "${var.app_name}--${var.environment_name}--refresh"
+  name = "${local.resource_prefix}refresh"
 }
