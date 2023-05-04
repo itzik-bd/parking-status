@@ -9,8 +9,8 @@ resource "aws_apigatewayv2_api" "api-gateway" {
 
 }
 resource "aws_apigatewayv2_stage" "api-gateway-stage" {
-  api_id = aws_apigatewayv2_api.api-gateway.id
-  name   = local.ws-stage-name
+  api_id      = aws_apigatewayv2_api.api-gateway.id
+  name        = local.ws-stage-name
   auto_deploy = true
 }
 
@@ -18,7 +18,7 @@ resource "aws_apigatewayv2_stage" "api-gateway-stage" {
 resource "aws_apigatewayv2_route" "connect-route" {
   api_id    = aws_apigatewayv2_api.api-gateway.id
   route_key = "$connect"
-  target = "integrations/${aws_apigatewayv2_integration.connect-route-integration.id}"
+  target    = "integrations/${aws_apigatewayv2_integration.connect-route-integration.id}"
 }
 resource "aws_apigatewayv2_integration" "connect-route-integration" {
   api_id           = aws_apigatewayv2_api.api-gateway.id
@@ -30,7 +30,7 @@ resource "aws_apigatewayv2_integration" "connect-route-integration" {
 resource "aws_apigatewayv2_route" "disconnect-route" {
   api_id    = aws_apigatewayv2_api.api-gateway.id
   route_key = "$disconnect"
-  target = "integrations/${aws_apigatewayv2_integration.disconnect-route-integration.id}"
+  target    = "integrations/${aws_apigatewayv2_integration.disconnect-route-integration.id}"
 }
 resource "aws_apigatewayv2_integration" "disconnect-route-integration" {
   api_id           = aws_apigatewayv2_api.api-gateway.id

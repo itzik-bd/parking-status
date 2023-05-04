@@ -1,0 +1,4 @@
+#!/bin/sh
+
+terraform fmt -recursive
+git add infrastructure/

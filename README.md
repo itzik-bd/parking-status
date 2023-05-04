@@ -40,3 +40,12 @@ The **backend** side using lambda, and it's event-driven. It has 2 parts:
 The API between the **frontend** and the **backend** is using WebSockets:
 1. The client open a WebSocket connection, and just wait for updates.
 2. The backend pushes 2 types of messages to the clients: **loading** event and **update** event. 
+
+# Development
+
+## Setup environment
+* Clone the repository
+* Install git hooks
+  ```
+  git config --local core.hooksPath .githooks/
+  ```

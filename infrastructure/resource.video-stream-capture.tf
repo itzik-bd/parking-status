@@ -5,21 +5,21 @@ data "archive_file" "video-stream-capture-code" {
 }
 
 resource "aws_lambda_function" "video-stream-capture" {
-  filename          = data.archive_file.video-stream-capture-code.output_path
-  source_code_hash  = data.archive_file.video-stream-capture-code.output_base64sha256
+  filename         = data.archive_file.video-stream-capture-code.output_path
+  source_code_hash = data.archive_file.video-stream-capture-code.output_base64sha256
 
-  function_name     = "${local.resource_prefix}video-stream-capture"
-  role              = aws_iam_role.iam_role.arn
-  handler           = "lambda.handler"
-  runtime           = "python3.8"
-  timeout           = 30
-  layers            = [
+  function_name = "${local.resource_prefix}video-stream-capture"
+  role          = aws_iam_role.iam_role.arn
+  handler       = "lambda.handler"
+  runtime       = "python3.8"
+  timeout       = 30
+  layers = [
     aws_serverlessapplicationrepository_cloudformation_stack.ffmpeg_layer.outputs["LayerVersion"]
   ]
 
   environment {
     variables = {
-      BUCKET_NAME = aws_s3_bucket.bucket-images.bucket
+      BUCKET_NAME    = aws_s3_bucket.bucket-images.bucket
       CAMERA_ADDRESS = var.camera_address
     }
   }
@@ -48,7 +48,7 @@ resource "aws_sns_topic_subscription" "refresh_to_video-stream-capture" {
 }
 
 resource "aws_cloudwatch_log_group" "log-retention-video-stream-capture" {
-  name = "/aws/lambda/${aws_lambda_function.video-stream-capture.function_name}"
+  name              = "/aws/lambda/${aws_lambda_function.video-stream-capture.function_name}"
   retention_in_days = local.log_retention_days
 }
 

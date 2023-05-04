@@ -11,11 +11,11 @@ variable "camera_address" {
 }
 
 variable "credentials_user" {
-  type = string
+  type      = string
   sensitive = true
 }
 
 variable "credentials_pass" {
-  type = string
+  type      = string
   sensitive = true
 }
