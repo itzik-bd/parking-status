@@ -16,19 +16,27 @@ locals {
 
 resource "aws_s3_bucket" "bucket-images" {
   bucket = "${local.resource_prefix}images"
-  acl = "private"
+}
 
-  cors_rule {
-    allowed_headers = ["*"]
-    allowed_methods = ["GET"]
-    allowed_origins = ["http://localhost:4200"]
-    expose_headers  = ["ETag"]
-    max_age_seconds = 3000
-  }
+resource "aws_s3_bucket" "bucket-web-app" {
+  bucket = "${local.resource_prefix}web-app"
+}
 
-  lifecycle_rule {
+resource "aws_s3_object" "web_files" {
+  for_each = fileset(local.web_output_dir, "**/*.*")
+  bucket = aws_s3_bucket.bucket-web-app.id
+  key = each.value
+  source = "${local.web_output_dir}/${each.value}"
+  etag = filemd5("${local.web_output_dir}/${each.value}")
+  content_type = lookup(tomap(local.mime_types), element(split(".", each.key), length(split(".", each.key)) - 1))
+}
+
+resource "aws_s3_bucket_lifecycle_configuration" "bucket-images-lifecycle-config" {
+  bucket = aws_s3_bucket.bucket-images.id
+
+  rule {
     id      = "image-cleanup"
-    enabled = true
+    status  = "Enabled"
 
     expiration {
       days = 1
@@ -36,9 +44,8 @@ resource "aws_s3_bucket" "bucket-images" {
   }
 }
 
-resource "aws_s3_bucket" "bucket-web-app" {
-  bucket = "${local.resource_prefix}web-app"
-  acl = "private"
+resource "aws_s3_bucket_cors_configuration" "bucket-images-cors-config" {
+  bucket = aws_s3_bucket.bucket-images.id
 
   cors_rule {
     allowed_headers = ["*"]
@@ -49,13 +56,44 @@ resource "aws_s3_bucket" "bucket-web-app" {
   }
 }
 
-resource "aws_s3_bucket_object" "web_files" {
-  for_each = fileset(local.web_output_dir, "**/*.*")
+resource "aws_s3_bucket_cors_configuration" "bucket-web-app-cors-config" {
   bucket = aws_s3_bucket.bucket-web-app.id
-  key = each.value
-  source = "${local.web_output_dir}/${each.value}"
-  etag = filemd5("${local.web_output_dir}/${each.value}")
-  content_type = lookup(tomap(local.mime_types), element(split(".", each.key), length(split(".", each.key)) - 1))
+
+  cors_rule {
+    allowed_headers = ["*"]
+    allowed_methods = ["GET"]
+    allowed_origins = ["http://localhost:4200"]
+    expose_headers  = ["ETag"]
+    max_age_seconds = 3000
+  }
+}
+
+resource "aws_s3_bucket_ownership_controls" "bucket-images-ownership-controls" {
+  bucket = aws_s3_bucket.bucket-images.id
+  rule {
+    object_ownership = "BucketOwnerPreferred"
+  }
+}
+
+resource "aws_s3_bucket_acl" "bucket-images-acl" {
+  depends_on = [aws_s3_bucket_ownership_controls.bucket-images-ownership-controls]
+
+  bucket = aws_s3_bucket.bucket-images.id
+  acl    = "private"
+}
+
+resource "aws_s3_bucket_ownership_controls" "bucket-web-app-ownership-controls" {
+  bucket = aws_s3_bucket.bucket-web-app.id
+  rule {
+    object_ownership = "BucketOwnerPreferred"
+  }
+}
+
+resource "aws_s3_bucket_acl" "bucket-web-app-acl" {
+  depends_on = [aws_s3_bucket_ownership_controls.bucket-web-app-ownership-controls]
+
+  bucket = aws_s3_bucket.bucket-web-app.id
+  acl    = "private"
 }
 
 data "aws_iam_policy_document" "bucket_policy_doc_web_app" {
