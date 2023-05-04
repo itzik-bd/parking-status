@@ -32,14 +32,14 @@ data "archive_file" "trigger-wait-and-refresh-code" {
 }
 
 resource "aws_lambda_function" "trigger-wait-and-refresh" {
-  filename          = data.archive_file.trigger-wait-and-refresh-code.output_path
-  source_code_hash  = data.archive_file.trigger-wait-and-refresh-code.output_base64sha256
+  filename         = data.archive_file.trigger-wait-and-refresh-code.output_path
+  source_code_hash = data.archive_file.trigger-wait-and-refresh-code.output_base64sha256
 
-  function_name     = "${local.resource_prefix}trigger-wait-and-refresh"
-  role              = aws_iam_role.iam_role.arn
-  handler           = "lambda.handler"
-  runtime           = local.nodejs_version
-  timeout           = 30
+  function_name = "${local.resource_prefix}trigger-wait-and-refresh"
+  role          = aws_iam_role.iam_role.arn
+  handler       = "lambda.handler"
+  runtime       = local.nodejs_version
+  timeout       = 30
 
   environment {
     variables = {
@@ -62,6 +62,6 @@ resource "aws_sns_topic_subscription" "analyze_finish_to_trigger" {
 }
 
 resource "aws_cloudwatch_log_group" "log-retention-trigger-wait-and-refresh" {
-  name = "/aws/lambda/${aws_lambda_function.trigger-wait-and-refresh.function_name}"
+  name              = "/aws/lambda/${aws_lambda_function.trigger-wait-and-refresh.function_name}"
   retention_in_days = local.log_retention_days
 }

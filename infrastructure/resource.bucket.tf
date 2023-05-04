@@ -8,7 +8,7 @@ locals {
     "json" = "application/json"
     "map"  = "application/json"
     "png"  = "image/png"
-    "jpeg"  = "image/jpeg"
+    "jpeg" = "image/jpeg"
     "svg"  = "image/svg+xml"
     "txt"  = "text/plain"
   }
@@ -23,11 +23,11 @@ resource "aws_s3_bucket" "bucket-web-app" {
 }
 
 resource "aws_s3_object" "web_files" {
-  for_each = fileset(local.web_output_dir, "**/*.*")
-  bucket = aws_s3_bucket.bucket-web-app.id
-  key = each.value
-  source = "${local.web_output_dir}/${each.value}"
-  etag = filemd5("${local.web_output_dir}/${each.value}")
+  for_each     = fileset(local.web_output_dir, "**/*.*")
+  bucket       = aws_s3_bucket.bucket-web-app.id
+  key          = each.value
+  source       = "${local.web_output_dir}/${each.value}"
+  etag         = filemd5("${local.web_output_dir}/${each.value}")
   content_type = lookup(tomap(local.mime_types), element(split(".", each.key), length(split(".", each.key)) - 1))
 }
 
@@ -35,8 +35,8 @@ resource "aws_s3_bucket_lifecycle_configuration" "bucket-images-lifecycle-config
   bucket = aws_s3_bucket.bucket-images.id
 
   rule {
-    id      = "image-cleanup"
-    status  = "Enabled"
+    id     = "image-cleanup"
+    status = "Enabled"
 
     expiration {
       days = 1
@@ -103,7 +103,7 @@ data "aws_iam_policy_document" "bucket_policy_doc_web_app" {
     ]
     principals {
       identifiers = [aws_cloudfront_origin_access_identity.s3_distribution_access_identity.iam_arn]
-      type = "AWS"
+      type        = "AWS"
     }
     resources = [
       "${aws_s3_bucket.bucket-web-app.arn}/*"
@@ -118,7 +118,7 @@ data "aws_iam_policy_document" "bucket_policy_doc_images" {
     ]
     principals {
       identifiers = [aws_cloudfront_origin_access_identity.s3_distribution_access_identity.iam_arn]
-      type = "AWS"
+      type        = "AWS"
     }
     resources = [
       "${aws_s3_bucket.bucket-images.arn}/*"

@@ -5,18 +5,18 @@ data "archive_file" "ws-notify-clients-code" {
 }
 
 resource "aws_lambda_function" "ws-notify-clients" {
-  filename          = data.archive_file.ws-notify-clients-code.output_path
-  source_code_hash  = data.archive_file.ws-notify-clients-code.output_base64sha256
+  filename         = data.archive_file.ws-notify-clients-code.output_path
+  source_code_hash = data.archive_file.ws-notify-clients-code.output_base64sha256
 
-  function_name     = "${local.resource_prefix}ws-notify-clients"
-  role              = aws_iam_role.iam_role.arn
-  handler           = "lambda.handler"
-  runtime           = local.nodejs_version
-  timeout           = 30
+  function_name = "${local.resource_prefix}ws-notify-clients"
+  role          = aws_iam_role.iam_role.arn
+  handler       = "lambda.handler"
+  runtime       = local.nodejs_version
+  timeout       = 30
 
   environment {
     variables = {
-      TABLE_NAME = aws_dynamodb_table.ws-table.name
+      TABLE_NAME      = aws_dynamodb_table.ws-table.name
       WS_ENDPOINT_URL = replace(aws_apigatewayv2_stage.api-gateway-stage.invoke_url, "wss://", "")
     }
   }
@@ -41,6 +41,6 @@ resource "aws_sns_topic_subscription" "refresh_to_notify_clients" {
 }
 
 resource "aws_cloudwatch_log_group" "log-retention-ws-notify-clients" {
-  name = "/aws/lambda/${aws_lambda_function.ws-notify-clients.function_name}"
+  name              = "/aws/lambda/${aws_lambda_function.ws-notify-clients.function_name}"
   retention_in_days = local.log_retention_days
 }
