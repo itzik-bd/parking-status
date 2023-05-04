@@ -7,9 +7,7 @@ terraform {
   }
 
   backend "s3" {
-    profile = "parking-status-cicd"
     region  = "eu-central-1"
-
     encrypt = true
     bucket  = "parking-status-tfstate"
     key     = "terraform.tfstate"
@@ -29,8 +27,7 @@ locals {
 }
 
 provider "aws" {
-  profile = "parking-status-cicd"
-  region  = "eu-central-1"
+  region = "eu-central-1"
 
   default_tags {
     tags = local.default_tags
@@ -38,10 +35,8 @@ provider "aws" {
 }
 
 provider "aws" {
-  alias = "useast1"
-
-  profile = "parking-status-cicd"
-  region  = local.authorizer_region
+  alias  = "useast1"
+  region = local.authorizer_region
 
   default_tags {
     tags = local.default_tags

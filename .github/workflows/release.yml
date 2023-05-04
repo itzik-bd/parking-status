@@ -1,4 +1,4 @@
-name: 'Terraform'
+name: 'Release'
 
 on:
   push:
@@ -8,12 +8,17 @@ on:
 permissions:
   contents: read
 
+env:
+  TF_VAR_app_name: ${{ vars.TF_VAR_app_name }}
+  TF_VAR_environment_name: ${{ vars.TF_VAR_environment_name }}
+  TF_VAR_camera_address: ${{ secrets.TF_VAR_camera_address }}
+  TF_VAR_credentials_user: ${{ secrets.TF_VAR_credentials_user }}
+  TF_VAR_credentials_pass: ${{ secrets.TF_VAR_credentials_pass }}
+
 jobs:
-  terraform:
-    name: 'Terraform'
+  release:
     runs-on: ubuntu-latest
     environment: production
-
     defaults:
       run:
         shell: bash
@@ -23,6 +28,14 @@ jobs:
     # Checkout the repository to the GitHub Actions runner
     - name: Checkout
       uses: actions/checkout@v3
+
+    - name: Install dependencies
+      run: npm ci
+      working-directory: ./web-app
+
+    - name: Build web-app
+      run: npm run build
+      working-directory: ./web-app
 
     # Configure AWS Credentials
     - name: Configure AWS Credentials
@@ -39,17 +52,21 @@ jobs:
     # Initialize a new or existing Terraform working directory by creating initial files, loading any remote state, downloading modules, etc.
     - name: Terraform Init
       run: terraform init
+      working-directory: ./infrastructure
 
     # Checks that all Terraform configuration files adhere to a canonical format
     - name: Terraform Format
       run: terraform fmt -check
+      working-directory: ./infrastructure
 
     # Generates an execution plan for Terraform
     - name: Terraform Plan
       run: terraform plan -input=false
+      working-directory: ./infrastructure
 
       # On push to "main", build or change infrastructure according to Terraform configuration files
       # Note: It is recommended to set up a required "strict" status check in your repository for "Terraform Cloud". See the documentation on "strict" required status checks for more information: https://help.github.com/en/github/administering-a-repository/types-of-required-status-checks
     - name: Terraform Apply
       if: github.ref == 'refs/heads/"main"' && github.event_name == 'push'
       run: terraform apply -auto-approve -input=false
+      working-directory: ./infrastructure
