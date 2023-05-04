@@ -39,7 +39,7 @@ resource "aws_s3_bucket_lifecycle_configuration" "bucket-images-lifecycle-config
     status = "Enabled"
 
     expiration {
-      days = 1
+      days = 180
     }
   }
 }
