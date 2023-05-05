@@ -34,7 +34,8 @@ resource "aws_iam_role_policy" "iam_role_policy" {
           "s3:GetObject",
         ],
         "Resource" : [
-          "${aws_s3_bucket.bucket-images.arn}/*"
+          "${aws_s3_bucket.bucket-images.arn}/*",
+          "${aws_s3_bucket.bucket-images-periodic.arn}/*"
         ]
       },
       {
