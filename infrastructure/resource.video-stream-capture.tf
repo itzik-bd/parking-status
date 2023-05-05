@@ -19,8 +19,9 @@ resource "aws_lambda_function" "video-stream-capture" {
 
   environment {
     variables = {
-      BUCKET_NAME    = aws_s3_bucket.bucket-images.bucket
-      CAMERA_ADDRESS = var.camera_address
+      IMAGES_PERIODIC_BUCKET_NAME = aws_s3_bucket.bucket-images-periodic.bucket
+      IMAGES_BUCKET_NAME          = aws_s3_bucket.bucket-images.bucket
+      CAMERA_ADDRESS              = var.camera_address
     }
   }
 }
