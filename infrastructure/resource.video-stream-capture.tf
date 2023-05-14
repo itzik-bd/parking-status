@@ -14,7 +14,8 @@ resource "aws_lambda_function" "video-stream-capture" {
   runtime       = "python3.8"
   timeout       = 30
   layers = [
-    aws_serverlessapplicationrepository_cloudformation_stack.ffmpeg_layer.outputs["LayerVersion"]
+    aws_serverlessapplicationrepository_cloudformation_stack.ffmpeg_layer.outputs["LayerVersion"],
+    aws_serverlessapplicationrepository_cloudformation_stack.image_magick_layer.outputs["LayerVersion"]
   ]
 
   environment {
@@ -30,6 +31,15 @@ resource "aws_lambda_function" "video-stream-capture" {
 resource "aws_serverlessapplicationrepository_cloudformation_stack" "ffmpeg_layer" {
   name           = "${local.resource_prefix}ffmpeg-lambda-layer"
   application_id = "arn:aws:serverlessrepo:us-east-1:145266761615:applications/ffmpeg-lambda-layer"
+  capabilities = [
+    "CAPABILITY_IAM"
+  ]
+}
+
+# see https://serverlessrepo.aws.amazon.com/applications/us-east-1/145266761615/image-magick-lambda-layer
+resource "aws_serverlessapplicationrepository_cloudformation_stack" "image_magick_layer" {
+  name           = "${local.resource_prefix}image-magick-lambda-layer"
+  application_id = "arn:aws:serverlessrepo:us-east-1:145266761615:applications/image-magick-lambda-layer"
   capabilities = [
     "CAPABILITY_IAM"
   ]
