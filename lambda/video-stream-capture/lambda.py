@@ -26,11 +26,15 @@ def handler(event, context):
     command=f"ffmpeg -err_detect aggressive -fflags discardcorrupt -y -rtsp_transport tcp -i {camAddress} -vframes 1 {targetFile}"
     subprocess.call(command.split(" "))
 
-    # step 2: upload the screenshot to S3
+    # step 2: convert standard jpeg to jpeg with jfif header
+    command=f"magick {targetFile} {targetFile}"
+    subprocess.call(command.split(" "))
+
+    # step 3: upload the screenshot to S3
     s3 = boto3.resource('s3')
     s3.meta.client.upload_file(targetFile, bucketName, targetFileName)
 
-    # step 3: cleanup
+    # step 4: cleanup
     os.remove(targetFile)
 
     return {
