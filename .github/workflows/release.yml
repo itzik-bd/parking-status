@@ -8,22 +8,19 @@ on:
 permissions:
   contents: read
 
-env:
-  TF_VAR_app_name: ${{ vars.TF_VAR_app_name }}
-  TF_VAR_environment_name: ${{ vars.TF_VAR_environment_name }}
-  TF_VAR_camera_address: ${{ secrets.TF_VAR_camera_address }}
-  TF_VAR_credentials_user: ${{ secrets.TF_VAR_credentials_user }}
-  TF_VAR_credentials_pass: ${{ secrets.TF_VAR_credentials_pass }}
-
 jobs:
 
   build-capture-analyzer-image:
     name: Build capture-analyzer image
+#    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
     runs-on: ubuntu-latest
     environment: production
     defaults:
       run:
         working-directory: ./lambda/capture-analyzer
+    env:
+      ECR_REPOSITORY: "parking-status-${{ vars.TF_VAR_environment_name }}-capture-analyzer"
+      IMAGE_TAG: latest
 
     steps:
       - name: Checkout
@@ -43,24 +40,27 @@ jobs:
         id: login-ecr
         uses: aws-actions/amazon-ecr-login@v1
 
-      - name: Build, tag, and push image to Amazon ECR
-        env:
-          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
-          ECR_REPOSITORY: "parking-status-${{ vars.TF_VAR_environment_name }}-capture-analyzer"
-          IMAGE_TAG: latest
-        run: |
-          docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
-          docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
+      - name: Build and tag image
+        run: docker build -t $${{ steps.login-ecr.outputs.registry }}/$ECR_REPOSITORY:$IMAGE_TAG .
+
+      - name: Push image to Amazon ECR
+        run: docker push ${{ steps.login-ecr.outputs.registry }}/$ECR_REPOSITORY:$IMAGE_TAG
 
   terraform:
     name: Terraform
-    needs: build-capture-analyzer-image
     runs-on: ubuntu-latest
     environment: production
     defaults:
       run:
         shell: bash
         working-directory: ./infrastructure
+
+    env:
+      TF_VAR_app_name: ${{ vars.TF_VAR_app_name }}
+      TF_VAR_environment_name: ${{ vars.TF_VAR_environment_name }}
+      TF_VAR_camera_address: ${{ secrets.TF_VAR_camera_address }}
+      TF_VAR_credentials_user: ${{ secrets.TF_VAR_credentials_user }}
+      TF_VAR_credentials_pass: ${{ secrets.TF_VAR_credentials_pass }}
 
     steps:
     # Checkout the repository to the GitHub Actions runner
@@ -105,6 +105,6 @@ jobs:
       # On push to "main", build or change infrastructure according to Terraform configuration files
       # Note: It is recommended to set up a required "strict" status check in your repository for "Terraform Cloud". See the documentation on "strict" required status checks for more information: https://help.github.com/en/github/administering-a-repository/types-of-required-status-checks
     - name: Terraform Apply
-      if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+#      if: github.ref == 'refs/heads/main' && github.event_name == 'push'
       run: terraform apply -auto-approve -input=false
       working-directory: ./infrastructure
