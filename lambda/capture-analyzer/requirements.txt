@@ -1,0 +1,4 @@
+tflite-runtime==2.7
+Pillow==8.4
+numpy==1.23
+boto3==1.26
