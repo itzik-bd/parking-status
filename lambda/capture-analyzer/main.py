@@ -2,7 +2,7 @@ import tflite_runtime.interpreter as tflite
 from PIL import Image
 import numpy as np
 import boto3
-import datetime
+from datetime import datetime, timezone
 import os
 
 TF_MODEL_FILE_PATH = 'model.tflite' # The default path to the saved TensorFlow Lite model
@@ -72,7 +72,7 @@ def handler(event, context):
 		   {"available": isAvailable},
 	   ],
 	   "image": f"images/{filename}",
-	   "lastUpdate": datetime.datetime.now().isoformat()
+	   "lastUpdate": datetime.now(timezone.utc).isoformat()
 	}
 
 	print(result)
