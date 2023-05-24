@@ -21,6 +21,7 @@ locals {
   }
   nodejs_version        = "nodejs14.x"
   resource_prefix       = "${var.app_name}--${var.environment_name}--"
+  resource_prefix_slim  = "${var.app_name}-${var.environment_name}-"
   log_retention_days    = 7
   refresh_delay_seconds = 15
   authorizer_region     = "us-east-1"

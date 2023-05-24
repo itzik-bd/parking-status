@@ -7,3 +7,4 @@ datasets/
 .env
 web-app/src/environments/environment.dev-prod.ts
 lambda/authorizer/credentials.js
+lambda/capture-analyzer/model.tflite

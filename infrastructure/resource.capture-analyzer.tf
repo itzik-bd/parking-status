@@ -5,14 +5,18 @@ data "archive_file" "capture-analyzer-code" {
 }
 
 resource "aws_lambda_function" "capture-analyzer" {
-  filename         = data.archive_file.capture-analyzer-code.output_path
-  source_code_hash = data.archive_file.capture-analyzer-code.output_base64sha256
+  package_type = "Image"
+  image_uri    = "${aws_ecr_repository.capture-analyzer-registry.repository_url}:latest"
 
   function_name = "${local.resource_prefix}capture-analyzer"
   role          = aws_iam_role.iam_role.arn
-  handler       = "lambda.handler"
-  runtime       = local.nodejs_version
   timeout       = 30
+
+  environment {
+    variables = {
+      IMAGES_BUCKET_NAME = aws_s3_bucket.bucket-images.bucket
+    }
+  }
 }
 
 resource "aws_s3_bucket_notification" "bucket_notification" {
