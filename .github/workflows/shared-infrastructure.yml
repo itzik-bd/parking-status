@@ -1,6 +1,9 @@
 name: 'Deploy shared infrastructure'
 
 on:
+  push:
+    branches: [ "main" ]
+    paths: [ "infrastructure/shared/**" ]
   workflow_dispatch:
 
 permissions:
