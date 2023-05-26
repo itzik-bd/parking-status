@@ -28,7 +28,7 @@ EOF
 data "archive_file" "trigger-wait-and-refresh-code" {
   type        = "zip"
   source_dir  = "${path.root}/../../lambda/trigger-wait-and-refresh"
-  output_path = "${path.root}/../target/trigger-wait-and-refresh.zip"
+  output_path = "${path.root}/../../target/trigger-wait-and-refresh.zip"
 }
 
 resource "aws_lambda_function" "trigger-wait-and-refresh" {

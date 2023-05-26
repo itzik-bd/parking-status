@@ -35,7 +35,7 @@ data "archive_file" "authorizer-code" {
   depends_on  = [local_file.credentials_file]
   type        = "zip"
   source_dir  = "${path.root}/../../lambda/authorizer"
-  output_path = "${path.root}/../target/authorizer.zip"
+  output_path = "${path.root}/../../target/authorizer.zip"
 }
 
 resource "aws_lambda_function" "authorizer_lambda_edge" {

@@ -1,7 +1,7 @@
 data "archive_file" "ws-notify-clients-code" {
   type        = "zip"
   source_dir  = "${path.root}/../../lambda/ws-notify-clients"
-  output_path = "${path.root}/../target/ws-notify-clients.zip"
+  output_path = "${path.root}/../../target/ws-notify-clients.zip"
 }
 
 resource "aws_lambda_function" "ws-notify-clients" {
