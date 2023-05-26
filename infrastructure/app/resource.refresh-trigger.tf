@@ -1,6 +1,6 @@
 data "archive_file" "refresh-trigger-code" {
   type        = "zip"
-  source_dir  = "${path.root}/../lambda/refresh-trigger"
+  source_dir  = "${path.root}/../../lambda/refresh-trigger"
   output_path = "${path.root}/../target/refresh-trigger.zip"
 }
 

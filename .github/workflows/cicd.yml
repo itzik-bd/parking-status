@@ -49,7 +49,7 @@ jobs:
         run: docker build -t ${{ steps.compose-image-url.outputs.url }} .
 
       - name: Push image to Amazon ECR
-        if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+#        if: github.ref == 'refs/heads/main' && github.event_name == 'push'
         run: docker push ${{ steps.compose-image-url.outputs.url }}
 
   terraform:

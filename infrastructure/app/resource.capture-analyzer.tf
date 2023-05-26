@@ -1,6 +1,6 @@
 data "archive_file" "capture-analyzer-code" {
   type        = "zip"
-  source_dir  = "${path.root}/../lambda/capture-analyzer"
+  source_dir  = "${path.root}/../../lambda/capture-analyzer"
   output_path = "${path.root}/../target/capture-analyzer.zip"
 }
 
