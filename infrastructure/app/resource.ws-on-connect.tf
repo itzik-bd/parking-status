@@ -1,7 +1,7 @@
 data "archive_file" "ws-on-connect-code" {
   type        = "zip"
   source_dir  = "${path.root}/../../lambda/ws-on-connect"
-  output_path = "${path.root}/../target/ws-on-connect.zip"
+  output_path = "${path.root}/../../target/ws-on-connect.zip"
 }
 
 resource "aws_lambda_function" "ws-on-connect" {

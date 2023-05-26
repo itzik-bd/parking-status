@@ -15,12 +15,11 @@ resource "aws_ecr_lifecycle_policy" "foopolicy" {
     "rules": [
         {
             "rulePriority": 1,
-            "description": "Expire images older than 3 days",
+            "description": "Expire all images beside latest",
             "selection": {
-                "tagStatus": "untagged",
-                "countType": "sinceImagePushed",
-                "countUnit": "days",
-                "countNumber": 3
+                "tagStatus": "any",
+                "countType": "imageCountMoreThan",
+                "countNumber": 1
             },
             "action": {
                 "type": "expire"

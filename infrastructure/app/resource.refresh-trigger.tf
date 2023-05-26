@@ -1,7 +1,7 @@
 data "archive_file" "refresh-trigger-code" {
   type        = "zip"
   source_dir  = "${path.root}/../../lambda/refresh-trigger"
-  output_path = "${path.root}/../target/refresh-trigger.zip"
+  output_path = "${path.root}/../../target/refresh-trigger.zip"
 }
 
 resource "aws_lambda_function" "refresh-trigger" {
