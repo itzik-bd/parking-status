@@ -1,9 +1,3 @@
-data "archive_file" "capture-analyzer-code" {
-  type        = "zip"
-  source_dir  = "${path.root}/../../lambda/capture-analyzer"
-  output_path = "${path.root}/../target/capture-analyzer.zip"
-}
-
 resource "aws_lambda_function" "capture-analyzer" {
   package_type = "Image"
   image_uri    = var.capture_analyzer_image_url

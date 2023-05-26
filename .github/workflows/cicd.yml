@@ -1,4 +1,4 @@
-name: 'Terraform'
+name: 'CI/CD'
 
 on:
   push:
@@ -17,15 +17,13 @@ jobs:
     defaults:
       run:
         working-directory: ./lambda/capture-analyzer
-    outputs:
-        image_url: ${{ steps.compose-image-url.outputs.url }}
 
     steps:
       - name: Checkout
         uses: actions/checkout@v3
 
       - name: Configure AWS credentials
-        uses: aws-actions/configure-aws-credentials@v1
+        uses: aws-actions/configure-aws-credentials@v2
         with:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
@@ -38,45 +36,34 @@ jobs:
         id: login-ecr
         uses: aws-actions/amazon-ecr-login@v1
 
-      - id: compose-image-url
-        run: echo "url=${{ steps.login-ecr.outputs.registry }}/parking-status-capture-analyzer:${{ github.run_number }}" >> $GITHUB_OUTPUT
-
       - name: Build and tag image
-        run: docker build -t ${{ steps.compose-image-url.outputs.url }} .
+        run: docker build -t ${{ steps.login-ecr.outputs.registry }}/parking-status-capture-analyzer:${{ github.run_number }} .
 
       - name: Push image to Amazon ECR
-        run: docker push ${{ steps.compose-image-url.outputs.url }}
+        run: docker push ${{ steps.login-ecr.outputs.registry }}/parking-status-capture-analyzer:${{ github.run_number }}
 
   terraform:
     name: Terraform
-    needs:
-      - build-capture-analyzer-image
+    needs: build-capture-analyzer-image
     runs-on: ubuntu-latest
     environment: production
     defaults:
       run:
         shell: bash
         working-directory: ./infrastructure/app
+    outputs:
+      distribution-id: ${{ steps.tf-outputs.outputs.distribution-id }}
 
     env:
       TF_VAR_environment_name: ${{ vars.TF_VAR_environment_name }}
       TF_VAR_camera_address: ${{ secrets.TF_VAR_camera_address }}
       TF_VAR_credentials_user: ${{ secrets.TF_VAR_credentials_user }}
       TF_VAR_credentials_pass: ${{ secrets.TF_VAR_credentials_pass }}
-      TF_VAR_capture_analyzer_image_url: ${{ needs.build-capture-analyzer-image.outputs.image_url }}
 
     steps:
     # Checkout the repository to the GitHub Actions runner
     - name: Checkout
       uses: actions/checkout@v3
-
-    - name: Install dependencies
-      run: npm ci
-      working-directory: ./web-app
-
-    - name: Build web-app
-      run: npm run build
-      working-directory: ./web-app
 
     # Configure AWS Credentials
     - name: Configure AWS Credentials
@@ -85,6 +72,13 @@ jobs:
         aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
         aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         aws-region: ${{ vars.AWS_REGION }}
+
+    - name: Login to Amazon ECR
+      id: login-ecr
+      uses: aws-actions/amazon-ecr-login@v1
+
+    - name: Set image URL variable
+      run: echo "TF_VAR_capture_analyzer_image_url=${{ steps.login-ecr.outputs.registry }}/parking-status-capture-analyzer:${{ github.run_number }}" >> $GITHUB_ENV
 
     # Install the latest version of Terraform CLI and configure the Terraform CLI configuration file with a Terraform Cloud user API token
     - name: Setup Terraform
@@ -105,3 +99,48 @@ jobs:
     # Apply changes to infrastructure
     - name: Terraform Apply
       run: terraform apply -auto-approve -input=false
+
+    - name: Get outputs
+      id: tf-outputs
+      run: echo "distribution-id=$(terraform-bin output -raw distribution-id)" >> "$GITHUB_OUTPUT"
+
+  web-app:
+    name: Deploy web-app
+    needs: terraform
+    runs-on: ubuntu-latest
+    environment: production
+    defaults:
+      run:
+        shell: bash
+        working-directory: ./web-app
+
+    steps:
+      # Checkout the repository to the GitHub Actions runner
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build web-app
+        run: npm run build
+
+      # Configure AWS Credentials
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v2
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ vars.AWS_REGION }}
+
+      - name: Upload to S3
+        run: aws s3 sync ../target/web-app s3://parking-status--${{ vars.TF_VAR_environment_name }}--web-app --delete
+
+      - name: Invalidate CloudFront
+        uses: chetan/invalidate-cloudfront-action@v2
+        env:
+          DISTRIBUTION: ${{ needs.terraform.outputs.distribution-id }}
+          PATHS: "/index.html"
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          AWS_REGION: ${{ vars.AWS_REGION }}

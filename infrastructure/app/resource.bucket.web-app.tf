@@ -1,30 +1,5 @@
-locals {
-  web_output_dir = "${path.root}/../../target/web-app"
-  mime_types = {
-    "css"  = "text/css"
-    "html" = "text/html"
-    "ico"  = "image/vnd.microsoft.icon"
-    "js"   = "application/javascript"
-    "json" = "application/json"
-    "map"  = "application/json"
-    "png"  = "image/png"
-    "jpeg" = "image/jpeg"
-    "svg"  = "image/svg+xml"
-    "txt"  = "text/plain"
-  }
-}
-
 resource "aws_s3_bucket" "bucket-web-app" {
   bucket = "${local.resource_prefix}web-app"
-}
-
-resource "aws_s3_object" "web_files" {
-  for_each     = fileset(local.web_output_dir, "**/*.*")
-  bucket       = aws_s3_bucket.bucket-web-app.id
-  key          = each.value
-  source       = "${local.web_output_dir}/${each.value}"
-  etag         = filemd5("${local.web_output_dir}/${each.value}")
-  content_type = lookup(tomap(local.mime_types), element(split(".", each.key), length(split(".", each.key)) - 1))
 }
 
 resource "aws_s3_bucket_cors_configuration" "bucket-web-app-cors-config" {
