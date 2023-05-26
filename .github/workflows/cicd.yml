@@ -18,9 +18,6 @@ jobs:
     defaults:
       run:
         working-directory: ./lambda/capture-analyzer
-    env:
-      ECR_REPOSITORY: "parking-status-capture-analyzer"
-      IMAGE_TAG: latest
     outputs:
         image_url: ${{ steps.compose-image-url.outputs.url }}
 
@@ -43,7 +40,7 @@ jobs:
         uses: aws-actions/amazon-ecr-login@v1
 
       - id: compose-image-url
-        run: echo "url=${{ steps.login-ecr.outputs.registry }}/$ECR_REPOSITORY:$IMAGE_TAG" >> $GITHUB_OUTPUT
+        run: echo "url=${{ steps.login-ecr.outputs.registry }}/parking-status-capture-analyzer:${{ github.run_number }}" >> $GITHUB_OUTPUT
 
       - name: Build and tag image
         run: docker build -t ${{ steps.compose-image-url.outputs.url }} .

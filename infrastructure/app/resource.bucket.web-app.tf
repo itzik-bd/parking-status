@@ -1,5 +1,5 @@
 locals {
-  web_output_dir = "${path.root}/../target/web-app"
+  web_output_dir = "${path.root}/../../target/web-app"
   mime_types = {
     "css"  = "text/css"
     "html" = "text/html"
