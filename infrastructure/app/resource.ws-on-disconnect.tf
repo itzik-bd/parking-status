@@ -1,6 +1,6 @@
 data "archive_file" "ws-on-disconnect-code" {
   type        = "zip"
-  source_dir  = "${path.root}/../lambda/ws-on-disconnect"
+  source_dir  = "${path.root}/../../lambda/ws-on-disconnect"
   output_path = "${path.root}/../target/ws-on-disconnect.zip"
 }
 

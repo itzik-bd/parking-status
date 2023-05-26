@@ -1,7 +1,3 @@
-variable "app_name" {
-  type = string
-}
-
 variable "environment_name" {
   type = string
 }
@@ -18,4 +14,8 @@ variable "credentials_user" {
 variable "credentials_pass" {
   type      = string
   sensitive = true
+}
+
+variable "capture_analyzer_image_url" {
+  type = string
 }

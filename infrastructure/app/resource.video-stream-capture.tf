@@ -1,6 +1,6 @@
 data "archive_file" "video-stream-capture-code" {
   type        = "zip"
-  source_dir  = "${path.root}/../lambda/video-stream-capture"
+  source_dir  = "${path.root}/../../lambda/video-stream-capture"
   output_path = "${path.root}/../target/video-stream-capture.zip"
 }
 

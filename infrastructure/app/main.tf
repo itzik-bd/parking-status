@@ -15,13 +15,15 @@ terraform {
 }
 
 locals {
+  app_name = "parking-status"
+
   default_tags = {
-    App = var.app_name
+    App = local.app_name
     Env = var.environment_name
   }
   nodejs_version        = "nodejs14.x"
-  resource_prefix       = "${var.app_name}--${var.environment_name}--"
-  resource_prefix_slim  = "${var.app_name}-${var.environment_name}-"
+  resource_prefix       = "${local.app_name}--${var.environment_name}--"
+  resource_prefix_slim  = "${local.app_name}-${var.environment_name}-"
   log_retention_days    = 7
   refresh_delay_seconds = 15
   authorizer_region     = "us-east-1"
@@ -50,7 +52,7 @@ module "lambda_edge_rule" {
     aws = aws.useast1
   }
 
-  app_name           = var.app_name
+  app_name           = local.app_name
   environment_name   = var.environment_name
   iam_for_lambda_arn = aws_iam_role.iam_role.arn
   nodejs_version     = local.nodejs_version

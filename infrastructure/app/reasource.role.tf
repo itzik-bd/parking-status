@@ -101,9 +101,7 @@ resource "aws_iam_role_policy" "iam_role_policy" {
         "Sid" : "PullFromECR",
         "Effect" : "Allow",
         "Action" : "ecr:BatchGetImage",
-        "Resource" : [
-          aws_ecr_repository.capture-analyzer-registry.arn
-        ]
+        "Resource" : ["*"]
       }
     ]
   })
