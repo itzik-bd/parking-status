@@ -1,0 +1,47 @@
+name: 'Build images'
+
+on:
+  push:
+    branches: [ "main" ]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+
+  build-capture-analyzer-image:
+    name: Build capture-analyzer image
+    runs-on: ubuntu-latest
+    environment: production
+    defaults:
+      run:
+        working-directory: ./lambda/capture-analyzer
+    env:
+      ECR_REPOSITORY: "parking-status-${{ vars.TF_VAR_environment_name }}-capture-analyzer"
+      IMAGE_TAG: latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ vars.AWS_REGION }}
+
+      - name: Download tensorflow model
+        run: aws s3 cp s3://parking-status-ml/models/model.tflite .
+
+      - name: Login to Amazon ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v1
+
+      - name: Build and tag image
+        run: docker build -t ${{ steps.login-ecr.outputs.registry }}/$ECR_REPOSITORY:$IMAGE_TAG .
+
+      - name: Push image to Amazon ECR
+        if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+        run: docker push ${{ steps.login-ecr.outputs.registry }}/$ECR_REPOSITORY:$IMAGE_TAG
