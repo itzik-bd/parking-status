@@ -6,7 +6,7 @@ data "archive_file" "capture-analyzer-code" {
 
 resource "aws_lambda_function" "capture-analyzer" {
   package_type = "Image"
-  image_uri    = "${aws_ecr_repository.capture-analyzer-registry.repository_url}:latest"
+  image_uri    = var.capture_analyzer_image_url
 
   function_name = "${local.resource_prefix}capture-analyzer"
   role          = aws_iam_role.iam_role.arn
