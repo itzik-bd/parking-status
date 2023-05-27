@@ -54,3 +54,4 @@ jobs:
     # Apply changes to infrastructure
     - name: Terraform Apply
       run: terraform apply -auto-approve -input=false
+
