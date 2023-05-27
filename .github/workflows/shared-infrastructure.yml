@@ -3,7 +3,9 @@ name: 'Deploy shared infrastructure'
 on:
   push:
     branches: [ "main" ]
-    paths: [ "infrastructure/shared/**" ]
+    paths:
+      - "infrastructure/shared/**"
+      - ".github/workflows/shared-infrastructure.yml"
   workflow_dispatch:
 
 permissions:

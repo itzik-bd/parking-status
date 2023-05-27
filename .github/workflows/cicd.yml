@@ -3,6 +3,9 @@ name: 'CI/CD'
 on:
   push:
     branches: [ "main" ]
+    paths:
+      - "!infrastructure/shared/**"
+      - "!.github/workflows/shared-infrastructure.yml"
   workflow_dispatch:
 
 permissions:
@@ -10,8 +13,26 @@ permissions:
 
 jobs:
 
+  changes:
+    runs-on: ubuntu-latest
+    outputs:
+      capture-analyzer: ${{ steps.changes.outputs.capture-analyzer }}
+      web-app: ${{ steps.changes.outputs.web-app }}
+    steps:
+      - uses: actions/checkout@v3
+      - uses: dorny/paths-filter@v2
+        id: changes
+        with:
+          filters: |
+            capture-analyzer:
+              - 'lambda/capture-analyzer/**'
+            web-app:
+              - 'web-app/**' 
+
   build-capture-analyzer-image:
     name: Build capture-analyzer image
+    needs: changes
+    if: ${{ needs.changes.outputs.capture-analyzer == 'true' }}
     runs-on: ubuntu-latest
     environment: production
     defaults:
@@ -45,6 +66,9 @@ jobs:
   terraform:
     name: Terraform
     needs: build-capture-analyzer-image
+    if: |
+      always() &&
+      (needs.build-capture-analyzer-image.result == 'success' || needs.build-capture-analyzer-image.result == 'skipped')
     runs-on: ubuntu-latest
     environment: production
     defaults:
@@ -78,7 +102,9 @@ jobs:
       uses: aws-actions/amazon-ecr-login@v1
 
     - name: Set image URL variable
-      run: echo "TF_VAR_capture_analyzer_image_url=${{ steps.login-ecr.outputs.registry }}/parking-status-capture-analyzer:${{ github.run_number }}" >> $GITHUB_ENV
+      run: |
+        last_image_tag=$(aws ecr describe-images --region ${{ vars.AWS_REGION }} --repository-name parking-status-capture-analyzer --query 'sort_by(imageDetails,& imagePushedAt)[-1].imageTags[0]' --output text)
+        echo "TF_VAR_capture_analyzer_image_url=${{ steps.login-ecr.outputs.registry }}/parking-status-capture-analyzer:${last_image_tag}" >> $GITHUB_ENV
 
     # Install the latest version of Terraform CLI and configure the Terraform CLI configuration file with a Terraform Cloud user API token
     - name: Setup Terraform
@@ -106,7 +132,10 @@ jobs:
 
   web-app:
     name: Deploy web-app
-    needs: terraform
+    needs:
+      - changes
+      - terraform
+    if: ${{ needs.changes.outputs.capture-analyzer == 'true' }}
     runs-on: ubuntu-latest
     environment: production
     defaults:
