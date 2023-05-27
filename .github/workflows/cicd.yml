@@ -3,10 +3,6 @@ name: 'CI/CD'
 on:
   push:
     branches: [ "main" ]
-    paths:
-      - "**"
-      - "!infrastructure/shared/**"
-      - "!.github/workflows/shared-infrastructure.yml"
   workflow_dispatch:
 
 permissions:
