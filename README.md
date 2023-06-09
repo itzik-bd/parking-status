@@ -1,3 +1,6 @@
+[![CI/CD](https://github.com/itzik-bd/parking-status/actions/workflows/cicd.yml/badge.svg)](https://github.com/itzik-bd/parking-status/actions/workflows/cicd.yml)
+[![Deploy shared infrastructure](https://github.com/itzik-bd/parking-status/actions/workflows/shared-infrastructure.yml/badge.svg)](https://github.com/itzik-bd/parking-status/actions/workflows/shared-infrastructure.yml)
+
 # Parking Status Application
 This is a personal project that solves a specific problem that my family had.
 
