@@ -86,7 +86,7 @@ jobs:
       TF_VAR_camera_address: ${{ secrets.TF_VAR_camera_address }}
       TF_VAR_credentials_user: ${{ secrets.TF_VAR_credentials_user }}
       TF_VAR_credentials_pass: ${{ secrets.TF_VAR_credentials_pass }}
-      TF_VAR_is_periodic_capture_enabled: ${{ secrets.TF_VAR_is_periodic_capture_enabled }}
+      TF_VAR_is_periodic_capture_enabled: ${{ vars.TF_VAR_is_periodic_capture_enabled }}
 
     steps:
     # Checkout the repository to the GitHub Actions runner
