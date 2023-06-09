@@ -19,3 +19,7 @@ variable "credentials_pass" {
 variable "capture_analyzer_image_url" {
   type = string
 }
+
+variable "is_periodic_capture_enabled" {
+  type = bool
+}

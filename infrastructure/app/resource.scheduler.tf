@@ -4,8 +4,9 @@ locals {
 
 resource "aws_cloudwatch_event_rule" "schedule" {
   name                = "schedule"
-  description         = "Schedule for Lambda Function"
+  description         = "Trigger video stream capture periodically"
   schedule_expression = local.schedule
+  is_enabled          = var.is_periodic_capture_enabled
 }
 
 resource "aws_cloudwatch_event_target" "schedule_lambda" {
