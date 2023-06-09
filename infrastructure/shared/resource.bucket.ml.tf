@@ -26,7 +26,7 @@ data "aws_iam_policy_document" "bucket_policy_doc_images" {
       type        = "AWS"
     }
     resources = [
-      "${aws_s3_bucket.bucket-ml.arn}/datasets/*"
+      "${aws_s3_bucket.bucket-ml.arn}/parking-status-dataset.tgz"
     ]
   }
 }

@@ -6,6 +6,7 @@ on:
     paths:
       - "**"
       - "!docs/**"
+      - "!machine-learning/**"
       - "!**/*.md"
       - "!infrastructure/shared/**"
       - "!.github/workflows/shared-infrastructure.yml"
@@ -54,7 +55,7 @@ jobs:
           aws-region: ${{ vars.AWS_REGION }}
 
       - name: Download tensorflow model
-        run: aws s3 cp s3://parking-status-ml/models/model.tflite .
+        run: aws s3 cp s3://parking-status-ml/model.tflite .
 
       - name: Login to Amazon ECR
         id: login-ecr

@@ -17,13 +17,16 @@ The application is:
 * Hosted on **AWS**.
 * Completely a **serverless** solution.
 * Code is deployed using **terraform**.
+* Machine learning model is trained using **Tensorflow** and inference is done using **Tensorflow Lite**.
 
 ## Application
 
 ### Architecture diagram
-![Alt text](docs/images/architecture.png "Title")
+![Alt text](docs/diagrams/architecture.drawio.png "Title")
 
 ### Components
+
+The **machine learning** model - see more information [here](machine-learning/README.md)  
 
 The **frontend** side is an Angular single-page-application.
 
