@@ -39,7 +39,7 @@ parking-status-dataset
 
 ## Train the model
 
-* Open the (Jupyter notebook)[./parking-status-classification.ipynb) via [Google Colab](https://colab.research.google.com/github/itzik-bd/parking-status/blob/main/machine-learning/parking-status-classification.ipynb)
+* Open the [Jupyter notebook](./parking-status-classification.ipynb) via [Google Colab](https://colab.research.google.com/github/itzik-bd/parking-status/blob/main/machine-learning/parking-status-classification.ipynb)
 * Find the generated model under `/content/model.tflite` and download it to your local machine
 * Upload the model to s3 bucket
   ```
