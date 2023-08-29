@@ -12,6 +12,7 @@
     <div class="header-box">
         <i [ngClass]="calculateBigAreaIcon()"></i>
         <div class="message">{{message}}</div>
+        <button *ngIf="!isConnected && !isConnecting && !isLoading" (click)="connect()" class="reconnect">Reconnect</button>
     </div>
   </div>
 
