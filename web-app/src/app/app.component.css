@@ -61,3 +61,11 @@
 img.latest {
   width: 100%;
 }
+
+button.reconnect {
+  padding: 16px 48px;
+  background: #839450;
+  color: white;
+  border: none;
+  font-size: 1.3em;
+}

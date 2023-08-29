@@ -39,7 +39,7 @@ export class AppComponent implements OnInit {
     this.connect();
   }
 
-  private connect() {
+  connect() {
     if (this.isConnected || this.isConnecting) {
       return; // nothing to do
     }
