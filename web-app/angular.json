@@ -122,5 +122,7 @@
       }
     }
   },
-  "defaultProject": "web-app"
+  "cli": {
+    "analytics": false
+  }
 }
