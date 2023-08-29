@@ -17,26 +17,8 @@ permissions:
 
 jobs:
 
-  changes:
-    runs-on: ubuntu-latest
-    outputs:
-      capture-analyzer: ${{ steps.changes.outputs.capture-analyzer }}
-      web-app: ${{ steps.changes.outputs.web-app }}
-    steps:
-      - uses: actions/checkout@v3
-      - uses: dorny/paths-filter@v2
-        id: changes
-        with:
-          filters: |
-            capture-analyzer:
-              - 'lambda/capture-analyzer/**'
-            web-app:
-              - 'web-app/**' 
-
   build-capture-analyzer-image:
     name: Build capture-analyzer image
-    needs: changes
-    if: ${{ needs.changes.outputs.capture-analyzer == 'true' }}
     runs-on: ubuntu-latest
     environment: production
     defaults:
@@ -138,9 +120,7 @@ jobs:
   web-app:
     name: Deploy web-app
     needs:
-      - changes
       - terraform
-    if: ${{ needs.changes.outputs.web-app == 'true' }}
     runs-on: ubuntu-latest
     environment: production
     defaults:
