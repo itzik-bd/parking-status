@@ -140,7 +140,7 @@ jobs:
     needs:
       - changes
       - terraform
-    if: ${{ needs.changes.outputs.capture-analyzer == 'true' }}
+    if: ${{ needs.changes.outputs.web-app == 'true' }}
     runs-on: ubuntu-latest
     environment: production
     defaults:
