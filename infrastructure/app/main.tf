@@ -21,7 +21,7 @@ locals {
     App = local.app_name
     Env = var.environment_name
   }
-  nodejs_version        = "nodejs14.x"
+  nodejs_version        = "nodejs18.x"
   resource_prefix       = "${local.app_name}--${var.environment_name}--"
   resource_prefix_slim  = "${local.app_name}-${var.environment_name}-"
   log_retention_days    = 7
