@@ -1,7 +1,8 @@
-const AWS = require('aws-sdk');
+const { DynamoDBClient, ScanCommand } = require("@aws-sdk/client-dynamodb");
+const { SNSClient, PublishCommand } = require("@aws-sdk/client-sns");
 
-const ddb = new AWS.DynamoDB.DocumentClient({ apiVersion: '2012-08-10', region: process.env.AWS_REGION });
-const sns = new AWS.SNS({ apiVersion: '2010-03-31' });
+const ddb = new DynamoDBClient({ apiVersion: '2012-08-10', region: process.env.AWS_REGION });
+const sns = new SNSClient({ apiVersion: '2010-03-31' });
 
 const SNS_TOPIC_ARN = process.env.SNS_TOPIC_ARN;
 const TABLE_NAME = process.env.TABLE_NAME;
@@ -47,10 +48,10 @@ async function logic(event) {
 }
 
 async function countConnections() {
-    scanResult = await ddb.scan({
+    const scanResult = await ddb.send(new ScanCommand({
         TableName: TABLE_NAME,
         Select: "COUNT"
-    }).promise();
+    }));
 
     return scanResult['Count'];
 }
@@ -58,10 +59,10 @@ async function countConnections() {
 async function publishRefreshMessage() {
     const message = {type: 'loading'};
 
-    let result = await sns.publish({
+    let result = await sns.send(new PublishCommand({
         Message: JSON.stringify(message),
         TopicArn: SNS_TOPIC_ARN
-    }).promise();
+    }));
 
     console.log(`message was sent to SNS (message id = ${result.MessageId})`);
 }

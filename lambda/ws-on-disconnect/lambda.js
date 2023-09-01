@@ -1,6 +1,6 @@
-const AWS = require('aws-sdk');
+const { DynamoDBClient, DeleteItemCommand } = require("@aws-sdk/client-dynamodb");
 
-const ddb = new AWS.DynamoDB.DocumentClient({ apiVersion: '2012-08-10', region: process.env.AWS_REGION });
+const ddb = new DynamoDBClient({ apiVersion: '2012-08-10', region: process.env.AWS_REGION });
 
 exports.handler = async event => {
     const connectionId = event.requestContext.connectionId;
@@ -9,13 +9,15 @@ exports.handler = async event => {
     const deleteParams = {
         TableName: process.env.TABLE_NAME,
         Key: {
-            connectionId: connectionId
+            connectionId: {
+                "S": connectionId
+            }
         }
     };
 
     try {
         console.log(`disconnecting session ${connectionId} due to: ${reason}`);
-        await ddb.delete(deleteParams).promise();
+        await ddb.send(new DeleteItemCommand(deleteParams));
     } catch (err) {
         console.error(`failed to disconnect`, err);
         return { statusCode: 500, body: 'Failed to disconnect: ' + JSON.stringify(err) };

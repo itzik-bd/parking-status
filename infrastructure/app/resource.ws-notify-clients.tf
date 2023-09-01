@@ -17,7 +17,7 @@ resource "aws_lambda_function" "ws-notify-clients" {
   environment {
     variables = {
       TABLE_NAME      = aws_dynamodb_table.ws-table.name
-      WS_ENDPOINT_URL = replace(aws_apigatewayv2_stage.api-gateway-stage.invoke_url, "wss://", "")
+      WS_ENDPOINT_URL = replace(aws_apigatewayv2_stage.api-gateway-stage.invoke_url, "wss://", "https://")
     }
   }
 }
