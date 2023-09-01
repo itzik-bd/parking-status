@@ -11,50 +11,51 @@ on:
       - "!infrastructure/shared/**"
       - "!.github/workflows/shared-infrastructure.yml"
   workflow_dispatch:
+  pull_request:
 
 permissions:
   contents: read
 
 jobs:
 
-  build-capture-analyzer-image:
-    name: Build capture-analyzer image
-    runs-on: ubuntu-latest
-    environment: production
-    defaults:
-      run:
-        working-directory: ./lambda/capture-analyzer
-
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v3
-
-      - name: Configure AWS credentials
-        uses: aws-actions/configure-aws-credentials@v2
-        with:
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region: ${{ vars.AWS_REGION }}
-
-      - name: Download tensorflow model
-        run: aws s3 cp s3://parking-status-ml/model.tflite .
-
-      - name: Login to Amazon ECR
-        id: login-ecr
-        uses: aws-actions/amazon-ecr-login@v1
-
-      - name: Build and tag image
-        run: docker build -t ${{ steps.login-ecr.outputs.registry }}/parking-status-capture-analyzer:${{ github.run_number }} .
-
-      - name: Push image to Amazon ECR
-        run: docker push ${{ steps.login-ecr.outputs.registry }}/parking-status-capture-analyzer:${{ github.run_number }}
+#  build-capture-analyzer-image:
+#    name: Build capture-analyzer image
+#    runs-on: ubuntu-latest
+#    environment: production
+#    defaults:
+#      run:
+#        working-directory: ./lambda/capture-analyzer
+#
+#    steps:
+#      - name: Checkout
+#        uses: actions/checkout@v3
+#
+#      - name: Configure AWS credentials
+#        uses: aws-actions/configure-aws-credentials@v2
+#        with:
+#          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+#          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+#          aws-region: ${{ vars.AWS_REGION }}
+#
+#      - name: Download tensorflow model
+#        run: aws s3 cp s3://parking-status-ml/model.tflite .
+#
+#      - name: Login to Amazon ECR
+#        id: login-ecr
+#        uses: aws-actions/amazon-ecr-login@v1
+#
+#      - name: Build and tag image
+#        run: docker build -t ${{ steps.login-ecr.outputs.registry }}/parking-status-capture-analyzer:${{ github.run_number }} .
+#
+#      - name: Push image to Amazon ECR
+#        run: docker push ${{ steps.login-ecr.outputs.registry }}/parking-status-capture-analyzer:${{ github.run_number }}
 
   terraform:
     name: Terraform
-    needs: build-capture-analyzer-image
-    if: |
-      always() &&
-      (needs.build-capture-analyzer-image.result == 'success' || needs.build-capture-analyzer-image.result == 'skipped')
+#    needs: build-capture-analyzer-image
+#    if: |
+#      always() &&
+#      (needs.build-capture-analyzer-image.result == 'success' || needs.build-capture-analyzer-image.result == 'skipped')
     runs-on: ubuntu-latest
     environment: production
     defaults:
@@ -117,44 +118,44 @@ jobs:
       id: tf-outputs
       run: echo "distribution-id=$(terraform-bin output -raw distribution-id)" >> "$GITHUB_OUTPUT"
 
-  web-app:
-    name: Deploy web-app
-    needs:
-      - terraform
-    runs-on: ubuntu-latest
-    environment: production
-    defaults:
-      run:
-        shell: bash
-        working-directory: ./web-app
-
-    steps:
-      # Checkout the repository to the GitHub Actions runner
-      - name: Checkout
-        uses: actions/checkout@v3
-
-      - name: Install dependencies
-        run: npm ci
-
-      - name: Build web-app
-        run: npm run build
-
-      # Configure AWS Credentials
-      - name: Configure AWS Credentials
-        uses: aws-actions/configure-aws-credentials@v2
-        with:
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region: ${{ vars.AWS_REGION }}
-
-      - name: Upload to S3
-        run: aws s3 sync ../target/web-app s3://parking-status--${{ vars.TF_VAR_environment_name }}--web-app --delete
-
-      - name: Invalidate CloudFront
-        uses: chetan/invalidate-cloudfront-action@v2
-        env:
-          DISTRIBUTION: ${{ needs.terraform.outputs.distribution-id }}
-          PATHS: "/index.html"
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          AWS_REGION: ${{ vars.AWS_REGION }}
+#  web-app:
+#    name: Deploy web-app
+#    needs:
+#      - terraform
+#    runs-on: ubuntu-latest
+#    environment: production
+#    defaults:
+#      run:
+#        shell: bash
+#        working-directory: ./web-app
+#
+#    steps:
+#      # Checkout the repository to the GitHub Actions runner
+#      - name: Checkout
+#        uses: actions/checkout@v3
+#
+#      - name: Install dependencies
+#        run: npm ci
+#
+#      - name: Build web-app
+#        run: npm run build
+#
+#      # Configure AWS Credentials
+#      - name: Configure AWS Credentials
+#        uses: aws-actions/configure-aws-credentials@v2
+#        with:
+#          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+#          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+#          aws-region: ${{ vars.AWS_REGION }}
+#
+#      - name: Upload to S3
+#        run: aws s3 sync ../target/web-app s3://parking-status--${{ vars.TF_VAR_environment_name }}--web-app --delete
+#
+#      - name: Invalidate CloudFront
+#        uses: chetan/invalidate-cloudfront-action@v2
+#        env:
+#          DISTRIBUTION: ${{ needs.terraform.outputs.distribution-id }}
+#          PATHS: "/index.html"
+#          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+#          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+#          AWS_REGION: ${{ vars.AWS_REGION }}
