@@ -11,7 +11,7 @@ resource "aws_lambda_function" "video-stream-capture" {
   function_name = "${local.resource_prefix}video-stream-capture"
   role          = aws_iam_role.iam_role.arn
   handler       = "lambda.handler"
-  runtime       = "python3.8"
+  runtime       = "python3.12"
   timeout       = 30
   layers = [
     aws_serverlessapplicationrepository_cloudformation_stack.ffmpeg_layer.outputs["LayerVersion"],
